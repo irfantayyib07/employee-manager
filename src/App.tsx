@@ -1,15 +1,15 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
-import EmployeesOverview from "./components/EmployeesOverview";
-import ManageEmployees from "./components/ManageEmployees";
+import Overview from "./components/Overview";
+import Manage from "./components/Manage";
 
 function App() {
  return (
   <>
    <Routes>
     <Route path="/" element={<Layout />}>
-     <Route path="/" element={<EmployeesOverview />} />
-     <Route path="/manage" element={<ManageEmployees />} />
+     <Route path="/" element={<Overview />} />
+     <Route path="/manage" element={<Manage />} />
     </Route>
    </Routes>
   </>

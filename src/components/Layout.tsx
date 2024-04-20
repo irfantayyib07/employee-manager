@@ -5,10 +5,14 @@ import Sidebar from "./Sidebar";
 function Layout({ }) {
  return (
   <>
-   <div className="grid grid-cols-4 grid-rows-10 h-screen">
-    <Header />
-    <Outlet />
+   <div className="flex">
     <Sidebar />
+    <div className="flex flex-col w-full">
+     {/* <Header /> */}
+     <main className="bg-slate-100 p-4 h-full">
+     <Outlet />
+     </main>
+    </div>
    </div>
   </>
  );

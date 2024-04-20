@@ -2,8 +2,8 @@
 function Header({  }) {
  return (
   <>
-   <header className="col-start-2 col-end-13 row-start-1 row-end-2 bg-slate-300 p-4">
-    MavenUp Employee Manager
+   <header className="bg-slate-300 p-4">
+    <h1>MAVENUP EMPLOYEE MANAGER</h1>
    </header>
   </>
  )
