@@ -4,7 +4,7 @@ function EmployeesOverview({  }) {
  return (
   <>
    <SectionHeading>
-    EmployeesOverview
+    Overview
    </SectionHeading>
   </>
  )

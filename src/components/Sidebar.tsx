@@ -5,7 +5,7 @@ function Sidebar({  }) {
  return (
   <>
    <aside className="bg-slate-200 h-screen p-4 basis-1/4">
-    <div className="whitespace-nowrap mb-4 select-none"><img src="/logo.svg" alt="app logo" className="size-6 inline" /> Employee Manager</div>
+    <div className="mb-4 select-none space-x-2"><img src="/logo.svg" alt="app logo" className="size-6 inline" /><span className="whitespace-nowrap">Employee Manager</span></div>
     <ul className="space-y-2">
      {
       SIDEBAR_NAV_LINKS.map(link => (
