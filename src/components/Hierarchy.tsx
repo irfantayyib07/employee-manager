@@ -10,7 +10,7 @@ function OrgChartTree() {
  const orgChart = createNestedHierarchy(employees, employees.find(item => item.supervisorId === "—"));
 
  return (
-  <div id="treeWrapper" style={{ width: '100%', height: '100%' }}>
+  <div id="treeWrapper" style={{ width: '100%', height: '80vh' }}>
    {!orgChart && <p>Add employees in the Manage section to see the hierarchy here</p>}
    {orgChart && <Tree data={orgChart} />}
   </div>
