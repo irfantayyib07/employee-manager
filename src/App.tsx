@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
-import Overview from "./components/Hierarchy";
+import Hierarchy from "./components/Hierarchy";
 import Manage from "./components/Manage";
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
   <>
    <Routes>
     <Route path="/" element={<Layout />}>
-     <Route path="/" element={<Overview />} />
+     <Route path="/" element={<Hierarchy />} />
      <Route path="/manage" element={<Manage />} />
     </Route>
    </Routes>

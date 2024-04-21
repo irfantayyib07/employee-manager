@@ -14,6 +14,15 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
    }
   }),
 
+  getEmployeesBySupervisorId: builder.query({
+   query: id => `/employees/?supervisorId=${id}`,
+   providesTags: (result, error, arg) => {
+    return [
+     ...result.map(employee => ({ type: 'Employee', id: employee.id }))
+    ];
+   }
+  }),
+
   addNewEmployee: builder.mutation({
    query: data => ({
     url: '/employees',
@@ -58,6 +67,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
 
 export const {
  useGetEmployeesQuery,
+ useGetEmployeesBySupervisorIdQuery,
  useAddNewEmployeeMutation,
  useUpdateEmployeeMutation,
  useDeleteEmployeeMutation,

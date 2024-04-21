@@ -37,7 +37,7 @@ function EditEmployee({ employee }) {
 
  const onEditEmployeeClicked = async () => {
   try {
-   if (name.length < 3 || name === employee.name) {
+   if (name.length < 3) {
     setName(employee.name);
     return;
    };

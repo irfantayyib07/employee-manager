@@ -12,11 +12,10 @@ import {
 import EditEmployee from "./EditEmployee";
 import DeleteEmployee from "./DeleteEmployee";
 import { useSelector } from "react-redux";
-import { selectAllSupervisors, selectSupervisorById } from "@/features/supervisors/supervisosSlice";
+import { selectSupervisorById } from "@/features/supervisors/supervisosSlice";
 
 function ManageEmployees({ }) {
  const { data: employees } = useGetEmployeesQuery("Employees");
- const supervisors = useSelector(selectAllSupervisors);
 
  return (
   <>
@@ -39,11 +38,6 @@ function ManageEmployees({ }) {
        return <EmployeesRow employee={employee} key={employee.id} />
       })
      }
-     {
-      supervisors?.map(supervisor => {
-       return <SupervisorsRow supervisor={supervisor} key={supervisor.id} />
-      })
-     }
     </TableBody>
    </Table>
 
@@ -61,22 +55,6 @@ const EmployeesRow = ({ employee }) => {
    <TableCell className="flex gap-1 flex-wrap">
     <EditEmployee employee={employee} />
     <DeleteEmployee employeeId={employee.id} />
-   </TableCell>
-  </TableRow>
- );
-};
-
-const SupervisorsRow = ({ supervisor }) => {
- const superSupervisor = useSelector(state => selectSupervisorById(state, supervisor.supervisorId));
- console.log(supervisor);
-
- return (
-  <TableRow>
-   <TableCell className="font-medium">{supervisor.name}</TableCell>
-   <TableCell>{superSupervisor?.name}</TableCell>
-   <TableCell className="flex gap-1 flex-wrap">
-    <EditEmployee employee={supervisor} />
-    <DeleteEmployee employeeId={supervisor.id} />
    </TableCell>
   </TableRow>
  );
