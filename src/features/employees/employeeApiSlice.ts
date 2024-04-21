@@ -6,10 +6,10 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
  endpoints: builder => ({
   getEmployees: builder.query({
    query: () => '/employees',
-   providesTags: (result, error, arg) => { // result is the state (with ids array and entities object)
+   providesTags: (result, error, arg) => {
+    console.log(result);
     return [
      { type: 'Employee', id: "LIST" },
-     ...result.map(employee => ({ type: 'Employee', id: employee.id }))
     ];
    }
   }),
@@ -18,7 +18,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
    query: id => `/employees/?supervisorId=${id}`,
    providesTags: (result, error, arg) => {
     return [
-     ...result.map(employee => ({ type: 'Employee', id: employee.id }))
+     { type: 'Employee', id: "LIST" },
     ];
    }
   }),
@@ -46,7 +46,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
     }
    }),
    invalidatesTags: (result, error, arg) => [
-    { type: 'Employee', id: arg.id }
+    { type: 'Employee', id: "LIST" }
    ]
   }),
 
@@ -57,7 +57,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
     body: { id }
    }),
    invalidatesTags: (result, error, arg) => [
-    { type: 'Employee', id: arg.id }
+    { type: 'Employee', id: "LIST" }
    ]
   }),
  })

@@ -29,7 +29,7 @@ function Hierarchy({ }) {
 }
 
 function Tree({ sup }) {
- const { data: employees } = useGetEmployeesBySupervisorIdQuery(sup.id, { refetchOnMountOrArgChange: true });
+ const { data: employees } = useGetEmployeesBySupervisorIdQuery(sup.id);
 
  return (
   <TreeItem itemId={sup.id} label={sup.name}>

@@ -30,14 +30,14 @@ import { useToast } from "./ui/use-toast";
 function EditEmployee({ employee }) {
  const defaultValue = useSelector(state => selectSupervisorById(state, employee.supervisorId));
  const [name, setName] = useState(employee.name);
- const [supervisor, setSupervisor] = useState(defaultValue.id);
+ const [supervisor, setSupervisor] = useState(defaultValue?.id);
  const { toast } = useToast();
 
  const [updateEmployee] = useUpdateEmployeeMutation();
 
  const onEditEmployeeClicked = async () => {
   try {
-   if (name.length < 3) {
+   if (name.length < 3 || (name === employee.name && supervisor == employee.supervisorId)) {
     setName(employee.name);
     return;
    };
@@ -103,7 +103,7 @@ export function SupervisorSelect({ defaultValue, supervisor, setSupervisor }) {
  return (
   <Select value={supervisor} onValueChange={setSupervisor}>
    <SelectTrigger className="w-[180px]">
-    <SelectValue placeholder={defaultValue.name} />
+    <SelectValue placeholder={defaultValue?.name} />
    </SelectTrigger>
    <SelectContent>
     <SelectGroup>

@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { selectSupervisorById } from "@/features/supervisors/supervisosSlice";
 
 function ManageEmployees({ }) {
- const { data: employees } = useGetEmployeesQuery("Employees");
+ const { data: employees } = useGetEmployeesQuery();
 
  return (
   <>

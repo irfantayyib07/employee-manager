@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const SUPERVISORS_URL = 'http://localhost:3500/supervisors';
+const SUPERVISORS_URL = 'http://localhost:4000/supervisors';
 
 const initialState = []
 
