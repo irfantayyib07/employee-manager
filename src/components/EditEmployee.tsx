@@ -68,7 +68,7 @@ function EditEmployee({ employee }) {
    </DialogTrigger>
    <DialogContent className="sm:max-w-[425px]">
     <DialogHeader>
-     <DialogTitle>Add an employee</DialogTitle>
+     <DialogTitle>Edit the employee</DialogTitle>
      <DialogDescription>
       Edit the details of your employee. Click save when you're done.
      </DialogDescription>
