@@ -41,7 +41,7 @@ function EditEmployee({ employee }) {
     jobs.push(updateEmployee({ id: supervisorId, subordinates: [...new Set([...supervisor.subordinates, employee.id])] }).unwrap());
    }
 
-   if (supervisorId === "—") {
+   if (prevSupervisor && (supervisorId !== prevSupervisor.id)) {
     jobs.push(updateEmployee({ id: prevSupervisor.id, subordinates: [...new Set([...prevSupervisor.subordinates].filter(id => id !== employee.id))] }).unwrap());
    }
 
