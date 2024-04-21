@@ -35,7 +35,7 @@ function Tree({ sup }) {
   <TreeItem itemId={sup.id} label={sup.name}>
    {
     employees?.map(employee => {
-     return <TreeItem itemId={`${employee.id + sup.id}`} label={employee.name} key={employee.id} />
+     return <TreeItem itemId={employee.id + employee.name} label={employee.name} key={employee.id} />
     })
    }
   </TreeItem>
