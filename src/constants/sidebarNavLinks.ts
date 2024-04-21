@@ -1,6 +1,6 @@
 export const SIDEBAR_NAV_LINKS = [
  {
-  name: "Overview",
+  name: "Hierarchy",
   path: "/"
  },
  {

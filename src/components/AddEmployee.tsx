@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
  Dialog,
+ DialogClose,
  DialogContent,
  DialogDescription,
  DialogFooter,
@@ -23,47 +24,44 @@ import {
 import { useAddNewEmployeeMutation } from "@/features/employees/employeeApiSlice";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
-export function SupervisorSelect({ supervisor, setSupervisor }) {
- const supervisors = useSelector(state => state.supervisors);
-
- return (
-  <Select value={supervisor} onValueChange={setSupervisor}>
-   <SelectTrigger className="w-[180px]">
-    <SelectValue placeholder="Select a supervisor" />
-   </SelectTrigger>
-   <SelectContent>
-    <SelectGroup>
-     <SelectLabel>Supervisors</SelectLabel>
-      {
-       supervisors?.map(supervisor => {
-        return <SelectItem key={supervisor.id} value={supervisor.id}>{supervisor.name}</SelectItem>
-       })
-      }
-    </SelectGroup>
-   </SelectContent>
-  </Select>
- );
-}
+import { useToast } from "./ui/use-toast";
+import { selectAllSupervisors } from "@/features/supervisors/supervisosSlice";
 
 export function AddEmployee() {
  const [name, setName] = useState("");
  const [supervisor, setSupervisor] = useState("");
+ const { toast } = useToast();
 
- const [addNewEmployee] = useAddNewEmployeeMutation()
+ const [addNewEmployee] = useAddNewEmployeeMutation();
 
  const onAddEmployeeClicked = async () => {
   try {
-   await addNewEmployee({ name, supervisorId: Number(supervisor) }).unwrap();
+   if (name.length < 3 || !supervisor) {
+    setName("");
+    setSupervisor("");
+    return;
+   };
+   await addNewEmployee({ name, supervisorId: +supervisor }).unwrap();
+   setName("");
+   setSupervisor("");
+   toast({
+    title: "Done!",
+    description: "Employee added successfully!",
+   });
   } catch (err) {
    console.error('Failed to add the employee', err);
+   toast({
+    variant: "destructive",
+    title: "Failure!",
+    description: "Something went wrong!",
+   });
   }
  };
 
  return (
   <Dialog>
    <DialogTrigger asChild>
-    <Button className="rounded-full size-10 aspect-square p-0 absolute bottom-8 right-8"><Plus className="size-6" /></Button>
+    <Button className="rounded-full size-10 aspect-square p-0 fixed bottom-8 right-8"><Plus className="size-6" /></Button>
    </DialogTrigger>
    <DialogContent className="sm:max-w-[425px]">
     <DialogHeader>
@@ -93,9 +91,35 @@ export function AddEmployee() {
      </div>
     </div>
     <DialogFooter>
-     <Button type="submit" onClick={onAddEmployeeClicked}>Save</Button>
+     <DialogClose asChild>
+      <Button type="submit" onClick={onAddEmployeeClicked}>Save</Button>
+     </DialogClose>
     </DialogFooter>
    </DialogContent>
   </Dialog>
  );
 }
+
+export function SupervisorSelect({ supervisor, setSupervisor }) {
+ const supervisors = useSelector(selectAllSupervisors);
+
+ return (
+  <Select value={supervisor} onValueChange={setSupervisor}>
+   <SelectTrigger className="w-[180px]">
+    <SelectValue placeholder="Select a supervisor" />
+   </SelectTrigger>
+   <SelectContent>
+    <SelectGroup>
+     <SelectLabel>Supervisors</SelectLabel>
+     {
+      supervisors?.map(supervisor => {
+       return <SelectItem key={supervisor.id} value={supervisor.id}>{supervisor.name}</SelectItem>;
+      })
+     }
+    </SelectGroup>
+   </SelectContent>
+  </Select>
+ );
+}
+
+export default AddEmployee;

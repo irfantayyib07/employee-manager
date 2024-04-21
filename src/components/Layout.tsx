@@ -1,22 +1,22 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button"
 import { AddEmployee } from "./AddEmployee";
+import { Toaster } from "./ui/toaster";
 
 function Layout({ }) {
  return (
   <>
-   <div className="flex max-h-screen">
+   <div className="max-h-screen md:flex">
     <Sidebar />
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full basis-2/3 grow">
      {/* <Header /> */}
-     <main className="bg-slate-100 p-4 h-screen overflow-auto">
+     <main className="bg-slate-100 p-4 md:h-screen md:overflow-auto">
       <Outlet />
      </main>
      <AddEmployee />
     </div>
+    <Toaster />
    </div>
   </>
  );

@@ -12,15 +12,26 @@ import {
 import { Button } from "@/components/ui/button";
 import { useDeleteEmployeeMutation } from "@/features/employees/employeeApiSlice";
 import { Trash } from "lucide-react";
+import { useToast } from "./ui/use-toast";
 
-export function DeleteEmployee({ employeeId }) {
+function DeleteEmployee({ employeeId }) {
  const [deleteEmployee] = useDeleteEmployeeMutation();
+ const { toast } = useToast();
 
  const onDeleteEmployeeClicked = async () => {
   try {
    await deleteEmployee({ id: employeeId });
+   toast({
+    title: "Done!",
+    description: "Employee deleted successfully!",
+   });
   } catch (err) {
-   console.log(`Failed to delete the employee: ${err}`);
+   console.error(`Failed to delete the employee: ${err}`);
+   toast({
+    variant: "destructive",
+    title: "Failure!",
+    description: "Something went wrong!",
+   });
   }
  };
  
@@ -44,3 +55,5 @@ export function DeleteEmployee({ employeeId }) {
   </AlertDialog>
  );
 }
+
+export default DeleteEmployee;

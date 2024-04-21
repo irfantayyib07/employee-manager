@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
  Dialog,
+ DialogClose,
  DialogContent,
  DialogDescription,
  DialogFooter,
@@ -22,43 +23,36 @@ import {
 } from "@/components/ui/select";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { selectSupervisorById } from "@/features/supervisors/supervisosSlice";
+import { selectAllSupervisors, selectSupervisorById } from "@/features/supervisors/supervisosSlice";
 import { useUpdateEmployeeMutation } from "@/features/employees/employeeApiSlice";
+import { useToast } from "./ui/use-toast";
 
-export function SupervisorSelect({ defaultValue, supervisor, setSupervisor }) {
- const supervisors = useSelector(state => state.supervisors);
-
- return (
-  <Select value={supervisor} onValueChange={setSupervisor} defaultValue={defaultValue.id}>
-   <SelectTrigger className="w-[180px]">
-    <SelectValue placeholder="Select a supervisor" />
-   </SelectTrigger>
-   <SelectContent>
-    <SelectGroup>
-     <SelectLabel>Supervisors</SelectLabel>
-     {
-      supervisors.map(supervisor => {
-       return <SelectItem key={supervisor.id} value={supervisor.id}>{supervisor.name}</SelectItem>;
-      })
-     }
-    </SelectGroup>
-   </SelectContent>
-  </Select>
- );
-}
-
-export function EditEmployee({ employee }) {
+function EditEmployee({ employee }) {
  const defaultValue = useSelector(state => selectSupervisorById(state, employee.supervisorId));
  const [name, setName] = useState(employee.name);
- const [supervisor, setSupervisor] = useState();
+ const [supervisor, setSupervisor] = useState(defaultValue.id);
+ const { toast } = useToast();
 
- const [updateEmployee] = useUpdateEmployeeMutation()
+ const [updateEmployee] = useUpdateEmployeeMutation();
 
  const onEditEmployeeClicked = async () => {
   try {
-   await updateEmployee({ id: employee.id, name, supervisorId: Number(supervisor) }).unwrap();
+   if (name.length < 3 || name === employee.name) {
+    setName(employee.name);
+    return;
+   };
+   await updateEmployee({ id: employee.id, name, supervisorId: +supervisor }).unwrap();
+   toast({
+    title: "Done!",
+    description: "Employee updated successfully!",
+   });
   } catch (err) {
    console.error('Failed to update the employee', err);
+   toast({
+    variant: "destructive",
+    title: "Failure!",
+    description: "Something went wrong!",
+   });
   }
  };
 
@@ -94,9 +88,35 @@ export function EditEmployee({ employee }) {
      </div>
     </div>
     <DialogFooter>
-     <Button type="submit" onClick={onEditEmployeeClicked}>Save</Button>
+     <DialogClose asChild>
+      <Button type="submit" onClick={onEditEmployeeClicked}>Save</Button>
+     </DialogClose>
     </DialogFooter>
    </DialogContent>
   </Dialog>
  );
 }
+
+export function SupervisorSelect({ defaultValue, supervisor, setSupervisor }) {
+ const supervisors = useSelector(selectAllSupervisors);
+
+ return (
+  <Select value={supervisor} onValueChange={setSupervisor}>
+   <SelectTrigger className="w-[180px]">
+    <SelectValue placeholder={defaultValue.name} />
+   </SelectTrigger>
+   <SelectContent>
+    <SelectGroup>
+     <SelectLabel>Supervisors</SelectLabel>
+     {
+      supervisors.map(supervisor => {
+       return <SelectItem key={supervisor.id} value={supervisor.id}>{supervisor.name}</SelectItem>;
+      })
+     }
+    </SelectGroup>
+   </SelectContent>
+  </Select>
+ );
+}
+
+export default EditEmployee;

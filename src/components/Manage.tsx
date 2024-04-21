@@ -9,35 +9,14 @@ import {
  TableHeader,
  TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Pencil, Trash } from "lucide-react";
-import { EditEmployee } from "./EditEmployee";
-import { DeleteEmployee } from "./DeleteEmployee";
+import EditEmployee from "./EditEmployee";
+import DeleteEmployee from "./DeleteEmployee";
 import { useSelector } from "react-redux";
 import { selectAllSupervisors, selectSupervisorById } from "@/features/supervisors/supervisosSlice";
 
-const TableRowReturn = ({ employee }) => {
- const supervisor = useSelector(state => selectSupervisorById(state, employee.supervisorId));
- console.log(employee.supervisorId);
-
- return (
-  <TableRow key={employee.id}>
-   <TableCell className="font-medium">{employee.name}</TableCell>
-   <TableCell>{supervisor?.name}</TableCell>
-   <TableCell className="space-x-2">
-    <EditEmployee employee={employee} />
-    <DeleteEmployee employeeId={employee.id} />
-   </TableCell>
-  </TableRow>
- );
-};
-
-
 function ManageEmployees({ }) {
- const { data } = useGetEmployeesQuery("Employees");
+ const { data: employees } = useGetEmployeesQuery("Employees");
  const supervisors = useSelector(selectAllSupervisors);
-
- console.log(supervisors);
 
  return (
   <>
@@ -56,8 +35,13 @@ function ManageEmployees({ }) {
     </TableHeader>
     <TableBody>
      {
-      data?.map(employee => {
-       return <TableRowReturn employee={employee} key={employee.id} />
+      employees?.map(employee => {
+       return <EmployeesRow employee={employee} key={employee.id} />
+      })
+     }
+     {
+      supervisors?.map(supervisor => {
+       return <SupervisorsRow supervisor={supervisor} key={supervisor.id} />
       })
      }
     </TableBody>
@@ -66,5 +50,36 @@ function ManageEmployees({ }) {
   </>
  );
 }
+
+const EmployeesRow = ({ employee }) => {
+ const supervisor = useSelector(state => selectSupervisorById(state, employee.supervisorId));
+
+ return (
+  <TableRow>
+   <TableCell className="font-medium">{employee.name}</TableCell>
+   <TableCell>{supervisor?.name}</TableCell>
+   <TableCell className="flex gap-1 flex-wrap">
+    <EditEmployee employee={employee} />
+    <DeleteEmployee employeeId={employee.id} />
+   </TableCell>
+  </TableRow>
+ );
+};
+
+const SupervisorsRow = ({ supervisor }) => {
+ const superSupervisor = useSelector(state => selectSupervisorById(state, supervisor.supervisorId));
+ console.log(supervisor);
+
+ return (
+  <TableRow>
+   <TableCell className="font-medium">{supervisor.name}</TableCell>
+   <TableCell>{superSupervisor?.name}</TableCell>
+   <TableCell className="flex gap-1 flex-wrap">
+    <EditEmployee employee={supervisor} />
+    <DeleteEmployee employeeId={supervisor.id} />
+   </TableCell>
+  </TableRow>
+ );
+};
 
 export default ManageEmployees;

@@ -1,13 +1,13 @@
 import SectionHeading from "./ui/SectionHeading";
 
-function EmployeesOverview({  }) {
+function Hierarchy({  }) {
  return (
   <>
    <SectionHeading>
-    Overview
+    Hierarchy
    </SectionHeading>
   </>
  )
 }
 
-export default EmployeesOverview
+export default Hierarchy
