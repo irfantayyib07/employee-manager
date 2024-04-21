@@ -7,7 +7,7 @@ function SectionHeading({ children }: { children: React.ReactNode; }) {
    <h1 className="text-2xl mb-4 font-bold md:h-10">
     {children}
    </h1>
-   <Separator />
+   <Separator className="mb-4" />
   </>
  );
 }
