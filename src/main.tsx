@@ -5,9 +5,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { store } from "./app/store.ts";
 import { Provider } from 'react-redux';
 import "./output.css";
-import { fetchSupervisors } from "./features/supervisors/supervisosSlice.ts";
+import { extendedApiSlice } from "./app/employeeApiSlice.ts";
 
-store.dispatch(fetchSupervisors());
+store.dispatch(extendedApiSlice.endpoints.getEmployees.initiate()); // initiate thunk
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
  <React.StrictMode>

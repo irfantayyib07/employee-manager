@@ -10,17 +10,25 @@ import {
  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useDeleteEmployeeMutation } from "@/features/employees/employeeApiSlice";
+import { selectEmployeeById, useDeleteEmployeeMutation, useUpdateEmployeeMutation } from "@/app/employeeApiSlice";
 import { Trash } from "lucide-react";
 import { useToast } from "./ui/use-toast";
+import { useSelector } from "react-redux";
 
-function DeleteEmployee({ employeeId }) {
+function DeleteEmployee({ employee }) {
  const [deleteEmployee] = useDeleteEmployeeMutation();
  const { toast } = useToast();
 
+ const [updateEmployee] = useUpdateEmployeeMutation();
+ const supervisor = useSelector(state => selectEmployeeById(state, employee.supervisorId));
+
  const onDeleteEmployeeClicked = async () => {
   try {
-   await deleteEmployee({ id: employeeId });
+   const jobs = [deleteEmployee({ id: employee.id }).unwrap()];
+   if (supervisor) jobs.push(updateEmployee({ id: supervisor.id, subordinates: supervisor.subordinates.filter(id => id !== employee.id) }).unwrap());
+   
+   await Promise.all(jobs);
+
    toast({
     title: "Done!",
     description: "Employee deleted successfully!",
@@ -34,7 +42,7 @@ function DeleteEmployee({ employeeId }) {
    });
   }
  };
- 
+
  return (
   <AlertDialog>
    <AlertDialogTrigger asChild>

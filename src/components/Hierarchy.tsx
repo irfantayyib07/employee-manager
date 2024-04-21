@@ -1,44 +1,51 @@
 import SectionHeading from "./ui/SectionHeading";
-import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
-import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { useSelector } from "react-redux";
-import { selectAllSupervisors } from "@/features/supervisors/supervisosSlice";
-import { useGetEmployeesBySupervisorIdQuery } from "@/features/employees/employeeApiSlice";
+import Tree from 'react-d3-tree';
+
+const orgChart = {
+ name: 'CEO',
+ children: [
+  {
+   name: 'Manager',
+   children: [
+    {
+     name: 'Foreman',
+     children: [
+      {
+       name: 'Worker',
+      },
+     ],
+    },
+    {
+     name: 'Foreman',
+     children: [
+      {
+       name: 'Worker',
+      },
+     ],
+    },
+   ],
+  },
+ ],
+};
+
+function OrgChartTree() {
+ return (
+  // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
+  <div id="treeWrapper" style={{ width: '100%', height: '100%' }}>
+   <Tree data={orgChart} />
+  </div>
+ );
+}
 
 function Hierarchy({ }) {
- const supervisors = useSelector(selectAllSupervisors);
-
  return (
   <>
    <SectionHeading>
     Hierarchy
    </SectionHeading>
-
-   <SimpleTreeView
-    aria-label="file system navigator"
-    sx={{ flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
-   >
-    {
-     supervisors.map(sup => {
-      return <Tree sup={sup} key={sup.id} />;
-     })
-    }
-   </SimpleTreeView>
+   <OrgChartTree />
   </>
- );
-}
-
-function Tree({ sup }) {
- const { data: employees } = useGetEmployeesBySupervisorIdQuery(sup.id);
-
- return (
-  <TreeItem itemId={sup.id} label={sup.name}>
-   {
-    employees?.map(employee => {
-     return <TreeItem itemId={employee.id + employee.name} label={employee.name} key={employee.id} />
-    })
-   }
-  </TreeItem>
  );
 }
 

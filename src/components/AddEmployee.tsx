@@ -12,38 +12,37 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
-import {
- Select,
- SelectContent,
- SelectGroup,
- SelectItem,
- SelectLabel,
- SelectTrigger,
- SelectValue,
-} from "@/components/ui/select";
-import { useAddNewEmployeeMutation } from "@/features/employees/employeeApiSlice";
+import { selectEmployeeById, useAddNewEmployeeMutation, useUpdateEmployeeMutation } from "@/app/employeeApiSlice";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { useToast } from "./ui/use-toast";
-import { selectAllSupervisors } from "@/features/supervisors/supervisosSlice";
+import SupervisorSelector from "./ui/SupervisorSelector";
+import { useSelector } from "react-redux";
+import { v4 as uuidv4 } from 'uuid';
 
 export function AddEmployee() {
  const [name, setName] = useState("");
- const [supervisor, setSupervisor] = useState("");
+ const [supervisorId, setSupervisorId] = useState("—");
  const { toast } = useToast();
 
  const [addNewEmployee] = useAddNewEmployeeMutation();
+ const [updateEmployee] = useUpdateEmployeeMutation();
+
+ const supervisor = useSelector(state => selectEmployeeById(state, supervisorId));
 
  const onAddEmployeeClicked = async () => {
   try {
-   if (name.length < 3 || !supervisor) {
+   if (name.length < 3) {
     setName("");
-    setSupervisor("");
+    setSupervisorId("—");
     return;
    };
-   await addNewEmployee({ name, supervisorId: +supervisor }).unwrap();
+
+   const id = uuidv4();
+   const jobs = [addNewEmployee({ id, name, supervisorId: supervisorId, subordinates: [] }).unwrap()];
+   if (supervisor) jobs.push(updateEmployee({ id: supervisorId, subordinates: [...new Set([...supervisor?.subordinates, id])] }).unwrap());
+   await Promise.all(jobs);
    setName("");
-   setSupervisor("");
+   setSupervisorId("—");
    toast({
     title: "Done!",
     description: "Employee added successfully!",
@@ -87,7 +86,7 @@ export function AddEmployee() {
       <Label htmlFor="username" className="text-right">
        Supervisor
       </Label>
-      <SupervisorSelect supervisor={supervisor} setSupervisor={setSupervisor} />
+      <SupervisorSelector supervisorId={supervisorId} setSupervisorId={setSupervisorId} />
      </div>
     </div>
     <DialogFooter>
@@ -100,26 +99,6 @@ export function AddEmployee() {
  );
 }
 
-export function SupervisorSelect({ supervisor, setSupervisor }) {
- const supervisors = useSelector(selectAllSupervisors);
 
- return (
-  <Select value={supervisor} onValueChange={setSupervisor}>
-   <SelectTrigger className="w-[180px]">
-    <SelectValue placeholder="Select a supervisor" />
-   </SelectTrigger>
-   <SelectContent>
-    <SelectGroup>
-     <SelectLabel>Supervisors</SelectLabel>
-     {
-      supervisors?.map(supervisor => {
-       return <SelectItem key={supervisor.id} value={supervisor.id}>{supervisor.name}</SelectItem>;
-      })
-     }
-    </SelectGroup>
-   </SelectContent>
-  </Select>
- );
-}
 
 export default AddEmployee;

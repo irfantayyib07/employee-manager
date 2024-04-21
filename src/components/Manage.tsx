@@ -1,4 +1,4 @@
-import { useGetEmployeesQuery } from "@/features/employees/employeeApiSlice";
+import { selectEmployeeById, selectEmployeeIds, useGetEmployeesQuery } from "@/app/employeeApiSlice";
 import SectionHeading from "./ui/SectionHeading";
 import {
  Table,
@@ -12,10 +12,9 @@ import {
 import EditEmployee from "./EditEmployee";
 import DeleteEmployee from "./DeleteEmployee";
 import { useSelector } from "react-redux";
-import { selectSupervisorById } from "@/features/supervisors/supervisosSlice";
 
 function ManageEmployees({ }) {
- const { data: employees } = useGetEmployeesQuery();
+ const employees = useSelector(selectEmployeeIds);
 
  return (
   <>
@@ -28,14 +27,14 @@ function ManageEmployees({ }) {
     <TableHeader>
      <TableRow>
       <TableHead className="w-[200px]">Name</TableHead>
-      <TableHead className="w-[200px]">Supervisor</TableHead>
+      <TableHead className="w-[200px]">Supervised By</TableHead>
       <TableHead className="w-[200px]">Edit</TableHead>
      </TableRow>
     </TableHeader>
     <TableBody>
      {
-      employees?.map(employee => {
-       return <EmployeesRow employee={employee} key={employee.id} />
+      employees?.map(id => {
+       return <EmployeesRow employeeId={id} key={id} />
       })
      }
     </TableBody>
@@ -45,16 +44,17 @@ function ManageEmployees({ }) {
  );
 }
 
-const EmployeesRow = ({ employee }) => {
- const supervisor = useSelector(state => selectSupervisorById(state, employee.supervisorId));
+const EmployeesRow = ({ employeeId }) => {
+ const employee = useSelector(state => selectEmployeeById(state, employeeId))
+ const supervisor = useSelector(state => selectEmployeeById(state, employee.supervisorId))
 
  return (
   <TableRow>
-   <TableCell className="font-medium">{employee.name}</TableCell>
-   <TableCell>{supervisor?.name}</TableCell>
+   <TableCell className="font-medium">{employee?.name}</TableCell>
+   <TableCell>{supervisor?.name || "—"}</TableCell>
    <TableCell className="flex gap-1 flex-wrap">
     <EditEmployee employee={employee} />
-    <DeleteEmployee employeeId={employee.id} />
+    <DeleteEmployee employee={employee} />
    </TableCell>
   </TableRow>
  );

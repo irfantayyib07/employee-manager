@@ -12,36 +12,41 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Pencil } from "lucide-react";
-import {
- Select,
- SelectContent,
- SelectGroup,
- SelectItem,
- SelectLabel,
- SelectTrigger,
- SelectValue,
-} from "@/components/ui/select";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { selectAllSupervisors, selectSupervisorById } from "@/features/supervisors/supervisosSlice";
-import { useUpdateEmployeeMutation } from "@/features/employees/employeeApiSlice";
+import { selectEmployeeById, useUpdateEmployeeMutation } from "@/app/employeeApiSlice";
 import { useToast } from "./ui/use-toast";
+import SupervisorSelector from "./ui/SupervisorSelector";
 
 function EditEmployee({ employee }) {
- const defaultValue = useSelector(state => selectSupervisorById(state, employee.supervisorId));
+ const defaultValue = useSelector(state => selectEmployeeById(state, employee.supervisorId));
  const [name, setName] = useState(employee.name);
- const [supervisor, setSupervisor] = useState(defaultValue?.id);
+ const [supervisorId, setSupervisorId] = useState(defaultValue?.id);
  const { toast } = useToast();
 
  const [updateEmployee] = useUpdateEmployeeMutation();
 
+ const prevSupervisor = useSelector(state => selectEmployeeById(state, employee.supervisorId))
+ const supervisor = useSelector(state => selectEmployeeById(state, supervisorId));
+
  const onEditEmployeeClicked = async () => {
   try {
-   if (name.length < 3 || (name === employee.name && supervisor == employee.supervisorId)) {
+   if (name.length < 3 || (name === employee.name && supervisorId == employee.supervisorId)) {
     setName(employee.name);
     return;
    };
-   await updateEmployee({ id: employee.id, name, supervisorId: +supervisor }).unwrap();
+
+   const jobs = [updateEmployee({ id: employee.id, name, supervisorId: supervisorId }).unwrap()];
+   if (supervisor) {
+    jobs.push(updateEmployee({ id: supervisorId, subordinates: [...new Set([...supervisor.subordinates, employee.id])] }).unwrap());
+   }
+
+   if (supervisorId === "—") {
+    jobs.push(updateEmployee({ id: prevSupervisor.id, subordinates: [...new Set([...prevSupervisor.subordinates].filter(id => id !== employee.id))] }).unwrap());
+   }
+
+   await Promise.all(jobs);
+
    toast({
     title: "Done!",
     description: "Employee updated successfully!",
@@ -84,7 +89,7 @@ function EditEmployee({ employee }) {
       <Label htmlFor="username" className="text-right">
        Supervisor
       </Label>
-      <SupervisorSelect defaultValue={defaultValue} supervisor={supervisor} setSupervisor={setSupervisor} />
+      <SupervisorSelector employee={employee} defaultValue={defaultValue} supervisorId={supervisorId} setSupervisorId={setSupervisorId} />
      </div>
     </div>
     <DialogFooter>
@@ -94,28 +99,6 @@ function EditEmployee({ employee }) {
     </DialogFooter>
    </DialogContent>
   </Dialog>
- );
-}
-
-export function SupervisorSelect({ defaultValue, supervisor, setSupervisor }) {
- const supervisors = useSelector(selectAllSupervisors);
-
- return (
-  <Select value={supervisor} onValueChange={setSupervisor}>
-   <SelectTrigger className="w-[180px]">
-    <SelectValue placeholder={defaultValue?.name} />
-   </SelectTrigger>
-   <SelectContent>
-    <SelectGroup>
-     <SelectLabel>Supervisors</SelectLabel>
-     {
-      supervisors.map(supervisor => {
-       return <SelectItem key={supervisor.id} value={supervisor.id}>{supervisor.name}</SelectItem>;
-      })
-     }
-    </SelectGroup>
-   </SelectContent>
-  </Select>
  );
 }
 
