@@ -10,7 +10,7 @@ import { extendedApiSlice } from "./app/employeeApiSlice.ts";
 store.dispatch(extendedApiSlice.endpoints.getEmployees.initiate()); // initiate thunk
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
- <React.StrictMode>
+ // <React.StrictMode>
   <Provider store={store}>
    <BrowserRouter>
     <Routes>
@@ -18,5 +18,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     </Routes>
    </BrowserRouter>
   </Provider>
- </React.StrictMode>,
+ // </React.StrictMode>,
 );

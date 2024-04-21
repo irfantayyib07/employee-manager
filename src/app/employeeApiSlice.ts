@@ -21,15 +21,15 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
    }
   }),
 
-  // getEmployeesBySupervisorId: builder.query({
-  //  query: id => `/employees/?supervisorId=${id}`,
-  //  transformResponse: (responseData) => {
-  //   return employeesAdapter.setAll(initialState, responseData);
-  //  },
-  //  providesTags: (result, error, arg) => [
-  //   { type: 'Employee', id: "LIST" },
-  //  ]
-  // }),
+  getEmployeesBySupervisorId: builder.query({
+   query: id => `/employees/?supervisorId=${id}`,
+   transformResponse: (responseData) => {
+    if (responseData) return employeesAdapter.setAll(initialState, responseData);
+   },
+   providesTags: (result, error, arg) => [
+    { type: 'Employee', id: "LIST" },
+   ]
+  }),
 
   addNewEmployee: builder.mutation({
    query: data => ({
@@ -76,7 +76,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
 
 export const {
  useGetEmployeesQuery,
- // useGetEmployeesBySupervisorIdQuery,
+ useGetEmployeesBySupervisorIdQuery,
  useAddNewEmployeeMutation,
  useUpdateEmployeeMutation,
  useDeleteEmployeeMutation,

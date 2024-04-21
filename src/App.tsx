@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Hierarchy from "./components/Hierarchy";
 import Manage from "./components/Manage";
+import { createNestedHierarchy } from "./lib/utils";
 
 function App() {
  return (

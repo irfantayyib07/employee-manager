@@ -1,4 +1,4 @@
-import { selectEmployeeById, selectEmployeeIds, useGetEmployeesQuery } from "@/app/employeeApiSlice";
+import { selectEmployeeById, selectEmployeeIds } from "@/app/employeeApiSlice";
 import SectionHeading from "./ui/SectionHeading";
 import {
  Table,
