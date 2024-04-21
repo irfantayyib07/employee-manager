@@ -10,9 +10,20 @@ import {
  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { useDeleteEmployeeMutation } from "@/features/employees/employeeApiSlice";
 import { Trash } from "lucide-react";
 
-export function DeleteEmployee() {
+export function DeleteEmployee({ employeeId }) {
+ const [deleteEmployee] = useDeleteEmployeeMutation();
+
+ const onDeleteEmployeeClicked = async () => {
+  try {
+   await deleteEmployee({ id: employeeId });
+  } catch (err) {
+   console.log(`Failed to delete the employee: ${err}`);
+  }
+ };
+ 
  return (
   <AlertDialog>
    <AlertDialogTrigger asChild>
@@ -27,7 +38,7 @@ export function DeleteEmployee() {
     </AlertDialogHeader>
     <AlertDialogFooter>
      <AlertDialogCancel>Cancel</AlertDialogCancel>
-     <AlertDialogAction className="bg-red-500 hover:bg-red-500 hover:opacity-90">Delete</AlertDialogAction>
+     <AlertDialogAction className="bg-red-500 hover:bg-red-500 hover:opacity-90" onClick={onDeleteEmployeeClicked}>Delete</AlertDialogAction>
     </AlertDialogFooter>
    </AlertDialogContent>
   </AlertDialog>

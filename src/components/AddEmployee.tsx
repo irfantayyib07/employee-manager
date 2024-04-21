@@ -20,23 +20,26 @@ import {
  SelectTrigger,
  SelectValue,
 } from "@/components/ui/select";
-import { useAddNewEmployeeMutation } from "@/features/employeeApiSlice";
+import { useAddNewEmployeeMutation } from "@/features/employees/employeeApiSlice";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-export function SelectDemo() {
+export function SupervisorSelect({ supervisor, setSupervisor }) {
+ const supervisors = useSelector(state => state.supervisors);
+
  return (
-  <Select>
+  <Select value={supervisor} onValueChange={setSupervisor}>
    <SelectTrigger className="w-[180px]">
     <SelectValue placeholder="Select a supervisor" />
    </SelectTrigger>
    <SelectContent>
     <SelectGroup>
      <SelectLabel>Supervisors</SelectLabel>
-     <SelectItem value="apple">Apple</SelectItem>
-     <SelectItem value="banana">Banana</SelectItem>
-     <SelectItem value="blueberry">Blueberry</SelectItem>
-     <SelectItem value="grapes">Grapes</SelectItem>
-     <SelectItem value="pineapple">Pineapple</SelectItem>
+      {
+       supervisors?.map(supervisor => {
+        return <SelectItem key={supervisor.id} value={supervisor.id}>{supervisor.name}</SelectItem>
+       })
+      }
     </SelectGroup>
    </SelectContent>
   </Select>
@@ -45,10 +48,13 @@ export function SelectDemo() {
 
 export function AddEmployee() {
  const [name, setName] = useState("");
+ const [supervisor, setSupervisor] = useState("");
+
+ const [addNewEmployee] = useAddNewEmployeeMutation()
 
  const onAddEmployeeClicked = async () => {
   try {
-   await useAddNewEmployeeMutation({  }).unwrap();
+   await addNewEmployee({ name, supervisorId: Number(supervisor) }).unwrap();
   } catch (err) {
    console.error('Failed to add the employee', err);
   }
@@ -76,17 +82,18 @@ export function AddEmployee() {
        value={name}
        onChange={e => setName(e.target.value)}
        className="col-span-3"
+       required={true}
       />
      </div>
      <div className="grid grid-cols-4 items-center gap-4">
       <Label htmlFor="username" className="text-right">
-       Username
+       Supervisor
       </Label>
-      <SelectDemo />
+      <SupervisorSelect supervisor={supervisor} setSupervisor={setSupervisor} />
      </div>
     </div>
     <DialogFooter>
-     <Button type="submit" onClick={onAddEmployeeClicked}>Add</Button>
+     <Button type="submit" onClick={onAddEmployeeClicked}>Save</Button>
     </DialogFooter>
    </DialogContent>
   </Dialog>

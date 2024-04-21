@@ -5,6 +5,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { store } from "./app/store.ts";
 import { Provider } from 'react-redux';
 import "./output.css";
+import { fetchSupervisors } from "./features/supervisors/supervisosSlice.ts";
+
+store.dispatch(fetchSupervisors());
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
  <React.StrictMode>
