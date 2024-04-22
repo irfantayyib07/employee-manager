@@ -19,7 +19,6 @@ import { Trash } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { useSelector } from "react-redux";
 import { getSubordinates } from "@/lib/utils";
-import { useState } from "react";
 
 function DeleteEmployee({ employee, loadingState }) {
  const [loading, setLoading] = loadingState;
@@ -45,6 +44,7 @@ function DeleteEmployee({ employee, loadingState }) {
     );
 
    const subordinates = getSubordinates(employees, employee);
+   
    subordinates?.map(subordinate => {
     jobs.push(updateEmployee({ id: subordinate.id, supervisorId: "—" }).unwrap());
    });

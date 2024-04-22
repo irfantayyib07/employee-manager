@@ -20,14 +20,6 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
    },
   }),
 
-  getEmployeesBySupervisorId: builder.query({
-   query: (id) => `/employees/?supervisorId=${id}`,
-   transformResponse: (responseData) => {
-    if (responseData) return employeesAdapter.setAll(initialState, responseData);
-   },
-   providesTags: (result, error, arg) => [{ type: "Employee", id: "LIST" }],
-  }),
-
   addNewEmployee: builder.mutation({
    query: (data) => ({
     url: "/employees",
@@ -80,9 +72,6 @@ export const selectEmployeesResult = extendedApiSlice.endpoints.getEmployees.sel
 
 // Creates memoized selector
 const selectEmployeesData = createSelector(
- // (state) => {
- //  console.log(state.api.queries); // its result changes based on thunk initiation (in index.js)
- // },
  selectEmployeesResult,
  (employeesResult) => employeesResult.data, // normalized state object with ids & entities
 );

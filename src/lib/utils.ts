@@ -30,6 +30,5 @@ export function getSubordinates(employees, employee) {
  employee.subordinates.map(subordinateId => {
   subordinates.push(idToEmployee(employees, subordinateId));
  })
- console.log(subordinates);
  return subordinates
 }

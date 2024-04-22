@@ -38,11 +38,9 @@ function EditEmployee({ employee, loadingState }) {
     return;
    }
 
-   console.log(selectedSupervisorId);
    const jobs = [updateEmployee({ id: employee.id, name, supervisorId: selectedSupervisorId }).unwrap()];
 
    if (supervisorToBe) {
-    console.log("Updating New Supervisor");
     jobs.push(
      updateEmployee({
       id: selectedSupervisorId,
@@ -52,7 +50,6 @@ function EditEmployee({ employee, loadingState }) {
    }
 
    if (formerSupervisor && formerSupervisor.id !== "—" && selectedSupervisorId !== formerSupervisor.id) {
-    console.log("Updating Old Supervisor");
     jobs.push(
      updateEmployee({
       id: formerSupervisor.id,
