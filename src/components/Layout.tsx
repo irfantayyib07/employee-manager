@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import { AddEmployee } from "./AddEmployee";
 import { Toaster } from "./ui/toaster";
 
-function Layout({ }) {
+function Layout({}) {
  return (
   <>
    <div className="max-h-screen md:flex">

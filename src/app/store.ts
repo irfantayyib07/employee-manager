@@ -6,9 +6,9 @@ export const store = configureStore({
   [apiSlice.reducerPath]: apiSlice.reducer,
  },
 
- middleware: getDefaultMiddleware => {
+ middleware: (getDefaultMiddleware) => {
   return getDefaultMiddleware().concat(apiSlice.middleware);
  },
 
- devTools: true
+ devTools: true,
 });

@@ -8,68 +8,59 @@ const initialState = employeesAdapter.getInitialState();
 // SLICE
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
- endpoints: builder => ({
+ endpoints: (builder) => ({
   getEmployees: builder.query({
-   query: () => '/employees',
+   query: () => "/employees",
    transformResponse: (responseData) => {
     if (responseData) return employeesAdapter.setAll(initialState, responseData);
    },
-   providesTags: (result, error, arg) => { // result is the state (with ids array and entities object)
-    return [
-     { type: 'Employee', id: "LIST" },
-    ];
-   }
+   providesTags: (result, error, arg) => {
+    // result is the state (with ids array and entities object)
+    return [{ type: "Employee", id: "LIST" }];
+   },
   }),
 
   getEmployeesBySupervisorId: builder.query({
-   query: id => `/employees/?supervisorId=${id}`,
+   query: (id) => `/employees/?supervisorId=${id}`,
    transformResponse: (responseData) => {
     if (responseData) return employeesAdapter.setAll(initialState, responseData);
    },
-   providesTags: (result, error, arg) => [
-    { type: 'Employee', id: "LIST" },
-   ]
+   providesTags: (result, error, arg) => [{ type: "Employee", id: "LIST" }],
   }),
 
   addNewEmployee: builder.mutation({
-   query: data => ({
-    url: '/employees',
-    method: 'POST',
+   query: (data) => ({
+    url: "/employees",
+    method: "POST",
     body: {
-     data
-    }
+     data,
+    },
    }),
-   invalidatesTags: [
-    { type: 'Employee', id: "LIST" }
-   ]
+   invalidatesTags: [{ type: "Employee", id: "LIST" }],
   }),
 
   updateEmployee: builder.mutation({
-   query: data => ({
+   query: (data) => ({
     url: `/employees`,
-    method: 'PUT',
+    method: "PUT",
     body: {
-     ...data
+     ...data,
     },
    }),
-   invalidatesTags: (result, error, arg) => [
-    { type: 'Employee', id: "LIST" }
-   ]
+   invalidatesTags: (result, error, arg) => [{ type: "Employee", id: "LIST" }],
   }),
 
   deleteEmployee: builder.mutation({
-   query: id => ({
+   query: (id) => ({
     url: `/employees`,
-    method: 'DELETE',
+    method: "DELETE",
     body: {
-     ...id
-    }
+     ...id,
+    },
    }),
-   invalidatesTags: (result, error, arg) => [
-    { type: 'Employee', id: "LIST" }
-   ]
+   invalidatesTags: (result, error, arg) => [{ type: "Employee", id: "LIST" }],
   }),
- })
+ }),
 });
 
 // HOOKS
@@ -93,12 +84,12 @@ const selectEmployeesData = createSelector(
  //  console.log(state.api.queries); // its result changes based on thunk initiation (in index.js)
  // },
  selectEmployeesResult,
- employeesResult => employeesResult.data // normalized state object with ids & entities
+ (employeesResult) => employeesResult.data, // normalized state object with ids & entities
 );
 
 export const {
  selectAll: selectAllEmployees,
  selectById: selectEmployeeById,
- selectIds: selectEmployeeIds
+ selectIds: selectEmployeeIds,
  // Pass in a selector that returns the employees slice of state
-} = employeesAdapter.getSelectors(state => selectEmployeesData(state) ?? initialState);
+} = employeesAdapter.getSelectors((state) => selectEmployeesData(state) ?? initialState);

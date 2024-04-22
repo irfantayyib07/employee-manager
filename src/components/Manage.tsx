@@ -13,14 +13,12 @@ import EditEmployee from "./EditEmployee";
 import DeleteEmployee from "./DeleteEmployee";
 import { useSelector } from "react-redux";
 
-function ManageEmployees({ }) {
+function ManageEmployees({}) {
  const employees = useSelector(selectEmployeeIds);
 
  return (
   <>
-   <SectionHeading>
-    Manage your employees
-   </SectionHeading>
+   <SectionHeading>Manage your employees</SectionHeading>
 
    <Table>
     <TableCaption>You're all done!</TableCaption>
@@ -32,21 +30,18 @@ function ManageEmployees({ }) {
      </TableRow>
     </TableHeader>
     <TableBody>
-     {
-      employees?.map(id => {
-       return <EmployeesRow employeeId={id} key={id} />
-      })
-     }
+     {employees?.map((id) => {
+      return <EmployeesRow employeeId={id} key={id} />;
+     })}
     </TableBody>
    </Table>
-
   </>
  );
 }
 
 const EmployeesRow = ({ employeeId }) => {
- const employee = useSelector(state => selectEmployeeById(state, employeeId))
- const supervisor = useSelector(state => selectEmployeeById(state, employee.supervisorId))
+ const employee = useSelector((state) => selectEmployeeById(state, employeeId));
+ const supervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
 
  return (
   <TableRow>

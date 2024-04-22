@@ -22,14 +22,16 @@ function SupervisorSelector({ employee, defaultValue, supervisorId, setSuperviso
     <SelectGroup>
      <SelectLabel>Supervisors</SelectLabel>
      <SelectItem value={"—"}>No Supervisor</SelectItem>
-     {
-      supervisors?.map(supervisor => {
-       if ((supervisor.id !== employee?.id)) {
-        if (!employee?.subordinates.includes(supervisor.id))
-        return <SelectItem key={supervisor.id} value={supervisor.id}>{supervisor.name}</SelectItem>;
-       }
-      })
-     }
+     {supervisors?.map((supervisor) => {
+      if (supervisor.id !== employee?.id) {
+       if (!employee?.subordinates.includes(supervisor.id))
+        return (
+         <SelectItem key={supervisor.id} value={supervisor.id}>
+          {supervisor.name}
+         </SelectItem>
+        );
+      }
+     })}
     </SelectGroup>
    </SelectContent>
   </Select>

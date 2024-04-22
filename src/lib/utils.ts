@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 function idToEmployee(employees, id) {
- return employees.find(employee => employee.id === id);
+ return employees.find((employee) => employee.id === id);
 }
 
 export function createNestedHierarchy(employees, parent) {
@@ -17,7 +17,7 @@ export function createNestedHierarchy(employees, parent) {
  const result = { name: parent.name };
 
  if (parent.subordinates && parent.subordinates.length > 0) {
-  result.children = parent.subordinates.map(subordinateId => {
+  result.children = parent.subordinates.map((subordinateId) => {
    return createNestedHierarchy(employees, idToEmployee(employees, subordinateId));
   });
  }
