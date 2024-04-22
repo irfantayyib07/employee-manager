@@ -6,7 +6,7 @@ import { Toaster } from "./ui/toaster";
 function Layout({ }) {
  return (
   <>
-   <div className="h-screen flex flex-col md:flex-row">
+   <div className="h-svh flex flex-col md:flex-row">
     <Sidebar />
     <Outlet />
     <AddEmployee />
