@@ -742,6 +742,10 @@ body {
   margin-bottom: 1rem;
 }
 
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
 .mt-0 {
   margin-top: 0px;
 }
@@ -752,10 +756,6 @@ body {
 
 .mt-4 {
   margin-top: 1rem;
-}
-
-.mr-2 {
-  margin-right: 0.5rem;
 }
 
 .line-clamp-1 {
@@ -975,10 +975,6 @@ body {
 
 .basis-2\/3 {
   flex-basis: 66.666667%;
-}
-
-.basis-\[25px\] {
-  flex-basis: 25px;
 }
 
 .basis-full {
@@ -2088,10 +2084,6 @@ body {
 
   .sm\:top-auto {
     top: auto;
-  }
-
-  .sm\:mt-0 {
-    margin-top: 0px;
   }
 
   .sm\:max-w-\[425px\] {

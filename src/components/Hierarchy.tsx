@@ -21,7 +21,7 @@ function OrgChartTree() {
    }
    {!isLoading && !orgChart && <p>Add employees in the Manage section to see the hierarchy here</p>}
    {orgChart &&
-    <div id="treeWrapper" className="flex-stretch border border-slate-300 rounded-md overflow-hidden">
+    <div id="treeWrapper" className="h-full border border-slate-300 rounded-md overflow-hidden">
      <Tree data={orgChart} orientation="vertical" depthFactor={170} />
     </div>
    }
