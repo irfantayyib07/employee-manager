@@ -74,3 +74,7 @@
   @apply bg-background text-foreground;
  }
 }
+
+.flex-stretch {
+ flex: 1 1 auto;
+}

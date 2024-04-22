@@ -1,5 +1,5 @@
 import { selectEmployeeById, selectEmployeeIds } from "@/app/employeeApiSlice";
-import SectionHeading from "./ui/SectionHeading";
+import SectionHeading from "./ui/section-heading";
 import {
  Table,
  TableBody,
@@ -13,28 +13,30 @@ import EditEmployee from "./EditEmployee";
 import DeleteEmployee from "./DeleteEmployee";
 import { useSelector } from "react-redux";
 
-function ManageEmployees({}) {
+function ManageEmployees({ }) {
  const employees = useSelector(selectEmployeeIds);
 
  return (
   <>
-   <SectionHeading>Manage your employees</SectionHeading>
+   <main className="bg-slate-100 p-4 basis-2/3 grow flex flex-col md:overflow-auto">
+    <SectionHeading>Manage your employees</SectionHeading>
 
-   <Table>
-    <TableCaption>You're all done!</TableCaption>
-    <TableHeader>
-     <TableRow>
-      <TableHead className="w-[200px]">Name</TableHead>
-      <TableHead className="w-[200px]">Supervised By</TableHead>
-      <TableHead className="w-[200px]">Edit</TableHead>
-     </TableRow>
-    </TableHeader>
-    <TableBody>
-     {employees?.map((id) => {
-      return <EmployeesRow employeeId={id} key={id} />;
-     })}
-    </TableBody>
-   </Table>
+     <Table>
+      <TableCaption>You're all done!</TableCaption>
+      <TableHeader>
+       <TableRow>
+        <TableHead className="w-[200px]">Name</TableHead>
+        <TableHead className="w-[200px]">Supervised By</TableHead>
+        <TableHead className="w-[200px]">Edit</TableHead>
+       </TableRow>
+      </TableHeader>
+      <TableBody>
+       {employees?.map((id) => {
+        return <EmployeesRow employeeId={id} key={id} />;
+       })}
+      </TableBody>
+     </Table>
+   </main>
   </>
  );
 }

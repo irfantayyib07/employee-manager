@@ -19,7 +19,7 @@ import {
 } from "@/app/employeeApiSlice";
 import { useState } from "react";
 import { useToast } from "./ui/use-toast";
-import SupervisorSelector from "./ui/SupervisorSelector";
+import SupervisorSelector from "./ui/supervisor-selector";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 

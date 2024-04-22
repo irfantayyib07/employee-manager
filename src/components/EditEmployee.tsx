@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { selectEmployeeById, useUpdateEmployeeMutation } from "@/app/employeeApiSlice";
 import { useToast } from "./ui/use-toast";
-import SupervisorSelector from "./ui/SupervisorSelector";
+import SupervisorSelector from "./ui/supervisor-selector";
 
 function EditEmployee({ employee }) {
  const defaultValue = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
