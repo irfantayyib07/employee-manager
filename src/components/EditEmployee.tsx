@@ -19,38 +19,41 @@ import { useToast } from "./ui/use-toast";
 import SupervisorSelector from "./ui/supervisor-selector";
 
 function EditEmployee({ employee }) {
- const defaultValue = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
  const [name, setName] = useState(employee.name);
- const [supervisorId, setSupervisorId] = useState(defaultValue?.id);
- const { toast } = useToast();
-
+ 
+ const oldSupervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
+ const [selectedSupervisorId, setSelectedSupervisorId] = useState(oldSupervisor?.id);
+ const selectedSupervisor = useSelector((state) => selectEmployeeById(state, selectedSupervisorId));
+ 
  const [updateEmployee] = useUpdateEmployeeMutation();
-
- const prevSupervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
- const supervisor = useSelector((state) => selectEmployeeById(state, supervisorId));
+ 
+ const { toast } = useToast();
 
  const onEditEmployeeClicked = async () => {
   try {
-   if (name.length < 3 || (name === employee.name && supervisorId == employee.supervisorId)) {
+   if (name.length < 3 || (name === employee.name && selectedSupervisorId === employee.supervisorId)) {
     setName(employee.name);
     return;
    }
 
-   const jobs = [updateEmployee({ id: employee.id, name, supervisorId: supervisorId }).unwrap()];
-   if (supervisor) {
+   const jobs = [updateEmployee({ id: employee.id, name, supervisorId: selectedSupervisorId }).unwrap()];
+
+   if (selectedSupervisor) {
+    console.log("Updating New Supervisor");
     jobs.push(
      updateEmployee({
-      id: supervisorId,
-      subordinates: [...new Set([...supervisor.subordinates, employee.id])],
+      id: selectedSupervisorId,
+      subordinates: [...selectedSupervisor.subordinates, employee.id],
      }).unwrap(),
     );
    }
 
-   if (prevSupervisor && supervisorId !== prevSupervisor.id) {
+   if (oldSupervisor && oldSupervisor.id !== "—" && selectedSupervisorId !== oldSupervisor.id) {
+    console.log("Updating Old Supervisor");
     jobs.push(
      updateEmployee({
-      id: prevSupervisor.id,
-      subordinates: [...new Set([...prevSupervisor.subordinates].filter((id) => id !== employee.id))],
+      id: oldSupervisor.id,
+      subordinates: oldSupervisor.subordinates.filter(id => id !== employee.id),
      }).unwrap(),
     );
    }
@@ -96,9 +99,9 @@ function EditEmployee({ employee }) {
       </Label>
       <SupervisorSelector
        employee={employee}
-       defaultValue={defaultValue}
-       supervisorId={supervisorId}
-       setSupervisorId={setSupervisorId}
+       defaultValue={oldSupervisor}
+       supervisorId={selectedSupervisorId}
+       setSupervisorId={setSelectedSupervisorId}
       />
      </div>
     </div>

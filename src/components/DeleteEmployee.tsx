@@ -1,16 +1,16 @@
 import {
- AlertDialog,
- AlertDialogAction,
- AlertDialogCancel,
- AlertDialogContent,
- AlertDialogDescription,
- AlertDialogFooter,
- AlertDialogHeader,
- AlertDialogTitle,
- AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+ Dialog,
+ DialogClose,
+ DialogContent,
+ DialogDescription,
+ DialogFooter,
+ DialogHeader,
+ DialogTitle,
+ DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
+ selectAllEmployees,
  selectEmployeeById,
  useDeleteEmployeeMutation,
  useUpdateEmployeeMutation,
@@ -18,24 +18,34 @@ import {
 import { Trash } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { useSelector } from "react-redux";
+import { getSubordinates } from "@/lib/utils";
 
 function DeleteEmployee({ employee }) {
- const [deleteEmployee] = useDeleteEmployeeMutation();
- const { toast } = useToast();
+ const employees = useSelector(selectAllEmployees);
 
  const [updateEmployee] = useUpdateEmployeeMutation();
+ const [deleteEmployee] = useDeleteEmployeeMutation();
+
  const supervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
+
+ const { toast } = useToast();
 
  const onDeleteEmployeeClicked = async () => {
   try {
    const jobs = [deleteEmployee({ id: employee.id }).unwrap()];
+
    if (supervisor)
     jobs.push(
      updateEmployee({
       id: supervisor.id,
-      subordinates: supervisor.subordinates.filter((id) => id !== employee.id),
+      subordinates: supervisor.subordinates.filter(id => id !== employee.id),
      }).unwrap(),
     );
+
+   const subordinates = getSubordinates(employees, employee);
+   subordinates?.map(subordinate => {
+    jobs.push(updateEmployee({ id: subordinate.id, supervisorId: "—" }).unwrap());
+   });
 
    await Promise.all(jobs);
 
@@ -54,31 +64,36 @@ function DeleteEmployee({ employee }) {
  };
 
  return (
-  <AlertDialog>
-   <AlertDialogTrigger asChild>
+  <Dialog>
+   <DialogTrigger asChild>
     <Button variant="destructive" className="rounded-full size-8 aspect-square p-0">
      <Trash className="size-4" />
     </Button>
-   </AlertDialogTrigger>
-   <AlertDialogContent>
-    <AlertDialogHeader>
-     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-     <AlertDialogDescription>
+   </DialogTrigger>
+   <DialogContent>
+    <DialogHeader>
+     <DialogTitle>Are you absolutely sure?</DialogTitle>
+     <DialogDescription>
       This action cannot be undone. This will permanently delete this employee and remove their data from our
       servers.
-     </AlertDialogDescription>
-    </AlertDialogHeader>
-    <AlertDialogFooter>
-     <AlertDialogCancel>Cancel</AlertDialogCancel>
-     <AlertDialogAction
-      className="bg-red-500 hover:bg-red-500 hover:opacity-90"
-      onClick={onDeleteEmployeeClicked}
+     </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+     <DialogClose asChild>
+      <Button variant="outline">
+       Cancel
+      </Button></DialogClose>
+     <DialogClose asChild
      >
-      Delete
-     </AlertDialogAction>
-    </AlertDialogFooter>
-   </AlertDialogContent>
-  </AlertDialog>
+      <Button
+       className="bg-red-500 hover:bg-red-500 hover:opacity-90"
+       onClick={onDeleteEmployeeClicked}>
+       Delete
+      </Button>
+     </DialogClose>
+    </DialogFooter>
+   </DialogContent>
+  </Dialog>
  );
 }
 

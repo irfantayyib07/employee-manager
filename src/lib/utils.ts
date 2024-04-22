@@ -24,3 +24,12 @@ export function createNestedHierarchy(employees, parent) {
 
  return result;
 }
+
+export function getSubordinates(employees, employee) {
+ const subordinates = [];
+ employee.subordinates.map(subordinateId => {
+  subordinates.push(idToEmployee(employees, subordinateId));
+ })
+ console.log(subordinates);
+ return subordinates
+}
