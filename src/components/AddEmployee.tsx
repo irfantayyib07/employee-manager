@@ -25,34 +25,39 @@ import { v4 as uuidv4 } from "uuid";
 
 export function AddEmployee() {
  const [name, setName] = useState("");
- const [supervisorId, setSupervisorId] = useState("—");
- const { toast } = useToast();
 
+ const [selectedSupervisorId, setSelectedSupervisorId] = useState("—");
+ const supervisorToBe = useSelector((state) => selectEmployeeById(state, selectedSupervisorId));
+ 
  const [addNewEmployee] = useAddNewEmployeeMutation();
  const [updateEmployee] = useUpdateEmployeeMutation();
-
- const supervisor = useSelector((state) => selectEmployeeById(state, supervisorId));
+ 
+ const { toast } = useToast();
 
  const onAddEmployeeClicked = async () => {
   try {
    if (name.length < 3) {
     setName("");
-    setSupervisorId("—");
+    setSelectedSupervisorId("—");
     return;
    }
 
    const id = uuidv4();
-   const jobs = [addNewEmployee({ id, name, supervisorId: supervisorId, subordinates: [] }).unwrap()];
-   if (supervisor)
+
+   const jobs = [addNewEmployee({ id, name, supervisorId: selectedSupervisorId, subordinates: [] }).unwrap()];
+
+   if (supervisorToBe)
     jobs.push(
      updateEmployee({
-      id: supervisorId,
-      subordinates: [...new Set([...supervisor?.subordinates, id])],
+      id: selectedSupervisorId,
+      subordinates: [...supervisorToBe?.subordinates, id],
      }).unwrap(),
     );
+
    await Promise.all(jobs);
+
    setName("");
-   setSupervisorId("—");
+   setSelectedSupervisorId("—");
    toast({
     title: "Done!",
     description: "Employee added successfully!",
@@ -96,7 +101,7 @@ export function AddEmployee() {
       <Label htmlFor="username" className="text-right">
        Supervisor
       </Label>
-      <SupervisorSelector supervisorId={supervisorId} setSupervisorId={setSupervisorId} />
+      <SupervisorSelector supervisorId={selectedSupervisorId} setSupervisorId={setSelectedSupervisorId} />
      </div>
     </div>
     <DialogFooter>

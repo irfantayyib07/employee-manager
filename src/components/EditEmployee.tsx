@@ -21,9 +21,9 @@ import SupervisorSelector from "./ui/supervisor-selector";
 function EditEmployee({ employee }) {
  const [name, setName] = useState(employee.name);
  
- const oldSupervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
- const [selectedSupervisorId, setSelectedSupervisorId] = useState(oldSupervisor?.id);
- const selectedSupervisor = useSelector((state) => selectEmployeeById(state, selectedSupervisorId));
+ const formerSupervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
+ const [selectedSupervisorId, setSelectedSupervisorId] = useState(formerSupervisor?.id);
+ const supervisorToBe = useSelector((state) => selectEmployeeById(state, selectedSupervisorId));
  
  const [updateEmployee] = useUpdateEmployeeMutation();
  
@@ -38,22 +38,22 @@ function EditEmployee({ employee }) {
 
    const jobs = [updateEmployee({ id: employee.id, name, supervisorId: selectedSupervisorId }).unwrap()];
 
-   if (selectedSupervisor) {
+   if (supervisorToBe) {
     console.log("Updating New Supervisor");
     jobs.push(
      updateEmployee({
       id: selectedSupervisorId,
-      subordinates: [...selectedSupervisor.subordinates, employee.id],
+      subordinates: [...supervisorToBe.subordinates, employee.id],
      }).unwrap(),
     );
    }
 
-   if (oldSupervisor && oldSupervisor.id !== "—" && selectedSupervisorId !== oldSupervisor.id) {
+   if (formerSupervisor && formerSupervisor.id !== "—" && selectedSupervisorId !== formerSupervisor.id) {
     console.log("Updating Old Supervisor");
     jobs.push(
      updateEmployee({
-      id: oldSupervisor.id,
-      subordinates: oldSupervisor.subordinates.filter(id => id !== employee.id),
+      id: formerSupervisor.id,
+      subordinates: formerSupervisor.subordinates.filter(id => id !== employee.id),
      }).unwrap(),
     );
    }
@@ -99,7 +99,7 @@ function EditEmployee({ employee }) {
       </Label>
       <SupervisorSelector
        employee={employee}
-       defaultValue={oldSupervisor}
+       defaultValue={formerSupervisor}
        supervisorId={selectedSupervisorId}
        setSupervisorId={setSelectedSupervisorId}
       />
