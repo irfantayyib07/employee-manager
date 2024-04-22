@@ -16,7 +16,6 @@ import Loader from "./ui/loader";
 import { useState } from "react";
 
 function ManageEmployees({ }) {
- const loadingState = useState(false);
  const { isLoading } = useGetEmployeesQuery();
 
  const employees = useSelector(selectEmployeeIds);
@@ -38,7 +37,7 @@ function ManageEmployees({ }) {
        </TableHeader>
        <TableBody>
         {employees?.map((id) => {
-         return <EmployeesRow employeeId={id} key={id} loadingState={loadingState} />;
+         return <EmployeesRow employeeId={id} key={id} />;
         })}
        </TableBody>
       </Table>}
@@ -48,7 +47,9 @@ function ManageEmployees({ }) {
  );
 }
 
-const EmployeesRow = ({ employeeId, loadingState }) => {
+const EmployeesRow = ({ employeeId }) => {
+ const loadingState = useState(false);
+ 
  const employee = useSelector((state) => selectEmployeeById(state, employeeId));
  const supervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
 
