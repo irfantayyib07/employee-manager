@@ -38,6 +38,7 @@ function EditEmployee({ employee, loadingState }) {
     return;
    }
 
+   console.log(selectedSupervisorId);
    const jobs = [updateEmployee({ id: employee.id, name, supervisorId: selectedSupervisorId }).unwrap()];
 
    if (supervisorToBe) {
@@ -45,7 +46,7 @@ function EditEmployee({ employee, loadingState }) {
     jobs.push(
      updateEmployee({
       id: selectedSupervisorId,
-      subordinates: [...supervisorToBe.subordinates, employee.id],
+      subordinates: [...new Set([...supervisorToBe.subordinates, employee.id])],
      }).unwrap(),
     );
    }
