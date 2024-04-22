@@ -13,8 +13,10 @@ import EditEmployee from "./EditEmployee";
 import DeleteEmployee from "./DeleteEmployee";
 import { useSelector } from "react-redux";
 import Loader from "./ui/loader";
+import { useState } from "react";
 
 function ManageEmployees({ }) {
+ const loadingState = useState(false);
  const { isLoading } = useGetEmployeesQuery();
 
  const employees = useSelector(selectEmployeeIds);
@@ -36,7 +38,7 @@ function ManageEmployees({ }) {
        </TableHeader>
        <TableBody>
         {employees?.map((id) => {
-         return <EmployeesRow employeeId={id} key={id} />;
+         return <EmployeesRow employeeId={id} key={id} loadingState={loadingState} />;
         })}
        </TableBody>
       </Table>}
@@ -46,7 +48,7 @@ function ManageEmployees({ }) {
  );
 }
 
-const EmployeesRow = ({ employeeId }) => {
+const EmployeesRow = ({ employeeId, loadingState }) => {
  const employee = useSelector((state) => selectEmployeeById(state, employeeId));
  const supervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
 
@@ -55,8 +57,8 @@ const EmployeesRow = ({ employeeId }) => {
    <TableCell className="font-medium">{employee?.name}</TableCell>
    <TableCell>{supervisor?.name || "—"}</TableCell>
    <TableCell className="flex gap-1 flex-wrap">
-    <EditEmployee employee={employee} />
-    <DeleteEmployee employee={employee} />
+    <EditEmployee employee={employee} loadingState={loadingState} />
+    <DeleteEmployee employee={employee} loadingState={loadingState} />
    </TableCell>
   </TableRow>
  );

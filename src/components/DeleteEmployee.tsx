@@ -21,8 +21,8 @@ import { useSelector } from "react-redux";
 import { getSubordinates } from "@/lib/utils";
 import { useState } from "react";
 
-function DeleteEmployee({ employee }) {
- const [loading, setLoading] = useState(false);
+function DeleteEmployee({ employee, loadingState }) {
+ const [loading, setLoading] = loadingState;
 
  const [updateEmployee] = useUpdateEmployeeMutation();
  const [deleteEmployee] = useDeleteEmployeeMutation();

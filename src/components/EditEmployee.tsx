@@ -18,14 +18,15 @@ import { selectEmployeeById, useUpdateEmployeeMutation } from "@/app/employeeApi
 import { useToast } from "./ui/use-toast";
 import SupervisorSelector from "./ui/supervisor-selector";
 
-function EditEmployee({ employee }) {
- const [loading, setLoading] = useState(false);
+function EditEmployee({ employee, loadingState }) {
+ const [loading, setLoading] = loadingState;
  const [name, setName] = useState(employee.name);
  
  const formerSupervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
+
  const [selectedSupervisorId, setSelectedSupervisorId] = useState(formerSupervisor?.id);
  const supervisorToBe = useSelector((state) => selectEmployeeById(state, selectedSupervisorId));
- 
+
  const [updateEmployee] = useUpdateEmployeeMutation();
  
  const { toast } = useToast();
