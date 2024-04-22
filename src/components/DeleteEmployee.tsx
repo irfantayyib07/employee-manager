@@ -19,13 +19,15 @@ import { Trash } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { useSelector } from "react-redux";
 import { getSubordinates } from "@/lib/utils";
+import { useState } from "react";
 
 function DeleteEmployee({ employee }) {
- const employees = useSelector(selectAllEmployees);
+ const [loading, setLoading] = useState(false);
 
  const [updateEmployee] = useUpdateEmployeeMutation();
  const [deleteEmployee] = useDeleteEmployeeMutation();
-
+ 
+ const employees = useSelector(selectAllEmployees);
  const supervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
 
  const { toast } = useToast();
@@ -47,6 +49,7 @@ function DeleteEmployee({ employee }) {
     jobs.push(updateEmployee({ id: subordinate.id, supervisorId: "—" }).unwrap());
    });
 
+   setLoading(true);
    await Promise.all(jobs);
 
    toast({
@@ -60,13 +63,15 @@ function DeleteEmployee({ employee }) {
     title: "Failure!",
     description: "Something went wrong!",
    });
+  } finally {
+   setLoading(false);
   }
  };
 
  return (
   <Dialog>
    <DialogTrigger asChild>
-    <Button variant="destructive" className="rounded-full size-8 aspect-square p-0">
+    <Button variant="destructive" className="rounded-full size-8 aspect-square p-0" disabled={loading}>
      <Trash className="size-4" />
     </Button>
    </DialogTrigger>

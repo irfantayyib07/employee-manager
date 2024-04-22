@@ -24,6 +24,7 @@ import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
 export function AddEmployee() {
+ const [loading, setLoading] = useState(false);
  const [name, setName] = useState("");
 
  const [selectedSupervisorId, setSelectedSupervisorId] = useState("—");
@@ -54,6 +55,7 @@ export function AddEmployee() {
      }).unwrap(),
     );
 
+   setLoading(true);
    await Promise.all(jobs);
 
    setName("");
@@ -69,13 +71,15 @@ export function AddEmployee() {
     title: "Failure!",
     description: "Something went wrong!",
    });
+  } finally {
+   setLoading(false);
   }
  };
 
  return (
   <Dialog>
    <DialogTrigger asChild>
-    <Button className="rounded-full size-10 aspect-square p-0 fixed bottom-8 right-8">
+    <Button className="rounded-full size-10 aspect-square p-0 fixed bottom-8 right-8" disabled={loading}>
      <Plus className="size-6" />
     </Button>
    </DialogTrigger>

@@ -19,6 +19,7 @@ import { useToast } from "./ui/use-toast";
 import SupervisorSelector from "./ui/supervisor-selector";
 
 function EditEmployee({ employee }) {
+ const [loading, setLoading] = useState(false);
  const [name, setName] = useState(employee.name);
  
  const formerSupervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
@@ -58,6 +59,7 @@ function EditEmployee({ employee }) {
     );
    }
 
+   setLoading(true);
    await Promise.all(jobs);
 
    toast({
@@ -71,13 +73,15 @@ function EditEmployee({ employee }) {
     title: "Failure!",
     description: "Something went wrong!",
    });
+  } finally {
+   setLoading(false);
   }
  };
 
  return (
   <Dialog>
    <DialogTrigger asChild>
-    <Button className="rounded-full size-8 aspect-square p-0">
+    <Button className="rounded-full size-8 aspect-square p-0" disabled={loading}>
      <Pencil className="size-4" />
     </Button>
    </DialogTrigger>
