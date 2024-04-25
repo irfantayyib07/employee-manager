@@ -1,20 +1,31 @@
-import { createSelector, createEntityAdapter } from "@reduxjs/toolkit";
+import { createSelector, createEntityAdapter, EntityState, EntityId } from "@reduxjs/toolkit";
 import { apiSlice } from "@/app/api/apiSlice";
+import { RootState } from "./store";
 
 const employeesAdapter = createEntityAdapter({});
 
 const initialState = employeesAdapter.getInitialState();
 
+type ExtendedEmployee = Employee & { _id: string, __v: number; };
+type TypedEmployee = Employee & EntityId
+
 // SLICE
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
  endpoints: (builder) => ({
-  getEmployees: builder.query({
+  getEmployees: builder.query<EntityState<{ id: EntityId; }, EntityId>, void>({
    query: () => "/employees",
-   transformResponse: (responseData) => {
-    if (responseData) return employeesAdapter.setAll(initialState, responseData);
+   transformResponse: (responseData: ExtendedEmployee[]) => {
+    if (!responseData) return;
+
+    responseData.map(employee => {
+     delete employee._id;
+     delete employee.__v;
+    });
+
+    return employeesAdapter.setAll(initialState, responseData);
    },
-   providesTags: (result, error, arg) => {
+   providesTags: () => {
     // result is the state (with ids array and entities object)
     return [{ type: "Employee", id: "LIST" }];
    },
@@ -39,7 +50,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
      ...data,
     },
    }),
-   invalidatesTags: (result, error, arg) => [{ type: "Employee", id: "LIST" }],
+   invalidatesTags: () => [{ type: "Employee", id: "LIST" }],
   }),
 
   deleteEmployee: builder.mutation({
@@ -50,7 +61,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
      ...id,
     },
    }),
-   invalidatesTags: (result, error, arg) => [{ type: "Employee", id: "LIST" }],
+   invalidatesTags: () => [{ type: "Employee", id: "LIST" }],
   }),
  }),
 });
@@ -59,7 +70,6 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
 
 export const {
  useGetEmployeesQuery,
- useGetEmployeesBySupervisorIdQuery,
  useAddNewEmployeeMutation,
  useUpdateEmployeeMutation,
  useDeleteEmployeeMutation,
@@ -76,9 +86,10 @@ const selectEmployeesData = createSelector(
  (employeesResult) => employeesResult.data, // normalized state object with ids & entities
 );
 
+
 export const {
  selectAll: selectAllEmployees,
  selectById: selectEmployeeById,
  selectIds: selectEmployeeIds,
  // Pass in a selector that returns the employees slice of state
-} = employeesAdapter.getSelectors((state) => selectEmployeesData(state) ?? initialState);
+} = employeesAdapter.getSelectors<RootState>((state) => selectEmployeesData(state) ?? initialState);

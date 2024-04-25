@@ -20,7 +20,7 @@ import {
 import { useState } from "react";
 import { useToast } from "./ui/use-toast";
 import SupervisorSelector from "./ui/supervisor-selector";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/app/store";
 import { v4 as uuidv4 } from "uuid";
 
 export function AddEmployee() {
@@ -28,11 +28,11 @@ export function AddEmployee() {
  const [name, setName] = useState("");
 
  const [selectedSupervisorId, setSelectedSupervisorId] = useState("—");
- const supervisorToBe = useSelector((state) => selectEmployeeById(state, selectedSupervisorId));
- 
+ const supervisorToBe = useAppSelector((state) => selectEmployeeById(state, selectedSupervisorId));
+
  const [addNewEmployee] = useAddNewEmployeeMutation();
  const [updateEmployee] = useUpdateEmployeeMutation();
- 
+
  const { toast } = useToast();
 
  const onAddEmployeeClicked = async () => {

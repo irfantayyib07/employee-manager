@@ -2,13 +2,14 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { SIDEBAR_NAV_LINKS } from "../constants/sidebarNavLinks";
 import { useEffect } from "react";
 
-function Sidebar({ }) {
+function Sidebar({}) {
  const { pathname } = useLocation();
 
  useEffect(() => {
-  for (let link of document.querySelectorAll("aside a")) {
-   if (link.pathname === "/") document.querySelector("a[href='/']").focus();
-   if (link.pathname === pathname) link.focus();
+  const links = document.querySelectorAll("aside a") as NodeListOf<HTMLAnchorElement>;
+  for (let i = 0; i < links.length; i++ ) {
+   if (links[i].pathname === "/") links[i].focus();
+   if (links[i].pathname === pathname) links[i].focus();
   }
  }, [pathname]);
 

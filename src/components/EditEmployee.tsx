@@ -12,23 +12,29 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Pencil } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/app/store";
 import { useState } from "react";
 import { selectEmployeeById, useUpdateEmployeeMutation } from "@/app/employeeApiSlice";
 import { useToast } from "./ui/use-toast";
 import SupervisorSelector from "./ui/supervisor-selector";
 
-function EditEmployee({ employee, loadingState }) {
+function EditEmployee({
+ employee,
+ loadingState,
+}: {
+ employee: Employee;
+ loadingState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+}) {
  const [loading, setLoading] = loadingState;
  const [name, setName] = useState(employee.name);
- 
- const formerSupervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
+
+ const formerSupervisor = useAppSelector((state) => selectEmployeeById(state, employee.supervisorId));
 
  const [selectedSupervisorId, setSelectedSupervisorId] = useState(formerSupervisor?.id);
- const supervisorToBe = useSelector((state) => selectEmployeeById(state, selectedSupervisorId));
+ const supervisorToBe = useAppSelector((state) => selectEmployeeById(state, selectedSupervisorId));
 
  const [updateEmployee] = useUpdateEmployeeMutation();
- 
+
  const { toast } = useToast();
 
  const onEditEmployeeClicked = async () => {
@@ -53,7 +59,7 @@ function EditEmployee({ employee, loadingState }) {
     jobs.push(
      updateEmployee({
       id: formerSupervisor.id,
-      subordinates: formerSupervisor.subordinates.filter(id => id !== employee.id),
+      subordinates: formerSupervisor.subordinates.filter((id) => id !== employee.id),
      }).unwrap(),
     );
    }

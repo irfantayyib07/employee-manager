@@ -8,10 +8,18 @@ import {
  SelectValue,
 } from "@/components/ui/select";
 import { selectAllEmployees } from "@/app/employeeApiSlice";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/app/store";
+import React from "react";
 
-function SupervisorSelector({ employee, defaultValue, supervisorId, setSupervisorId }) {
- const supervisors = useSelector(selectAllEmployees);
+type SupervisorSelectorProps = {
+ employee: Employee
+ defaultValue: Employee
+ supervisorId: string
+ setSupervisorId: React.SetStateAction<string>
+}
+
+function SupervisorSelector({ employee, defaultValue, supervisorId, setSupervisorId }: SupervisorSelectorProps) {
+ const supervisors = useAppSelector(selectAllEmployees);
 
  return (
   <Select value={supervisorId} onValueChange={setSupervisorId}>

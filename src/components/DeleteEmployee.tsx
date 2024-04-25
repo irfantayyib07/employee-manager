@@ -17,17 +17,24 @@ import {
 } from "@/app/employeeApiSlice";
 import { Trash } from "lucide-react";
 import { useToast } from "./ui/use-toast";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/app/store";
 import { getSubordinates } from "@/lib/utils";
 
-function DeleteEmployee({ employee, loadingState }) {
+function DeleteEmployee(
+ {
+  employee,
+  loadingState
+ }: {
+  employee: Employee;
+  loadingState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+ }) {
  const [loading, setLoading] = loadingState;
 
  const [updateEmployee] = useUpdateEmployeeMutation();
  const [deleteEmployee] = useDeleteEmployeeMutation();
- 
- const employees = useSelector(selectAllEmployees);
- const supervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
+
+ const employees = useAppSelector(selectAllEmployees);
+ const supervisor = useAppSelector((state) => selectEmployeeById(state, employee.supervisorId));
 
  const { toast } = useToast();
 
@@ -39,13 +46,13 @@ function DeleteEmployee({ employee, loadingState }) {
     jobs.push(
      updateEmployee({
       id: supervisor.id,
-      subordinates: supervisor.subordinates.filter(id => id !== employee.id),
+      subordinates: supervisor.subordinates.filter((id) => id !== employee.id),
      }).unwrap(),
     );
 
    const subordinates = getSubordinates(employees, employee);
-   
-   subordinates?.map(subordinate => {
+
+   subordinates?.map((subordinate) => {
     jobs.push(updateEmployee({ id: subordinate.id, supervisorId: "—" }).unwrap());
    });
 
@@ -85,14 +92,10 @@ function DeleteEmployee({ employee, loadingState }) {
     </DialogHeader>
     <DialogFooter>
      <DialogClose asChild>
-      <Button variant="outline">
-       Cancel
-      </Button></DialogClose>
-     <DialogClose asChild
-     >
-      <Button
-       className="bg-red-500 hover:bg-red-500 hover:opacity-90"
-       onClick={onDeleteEmployeeClicked}>
+      <Button variant="outline">Cancel</Button>
+     </DialogClose>
+     <DialogClose asChild>
+      <Button className="bg-red-500 hover:bg-red-500 hover:opacity-90" onClick={onDeleteEmployeeClicked}>
        Delete
       </Button>
      </DialogClose>

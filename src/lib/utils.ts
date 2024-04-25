@@ -5,19 +5,26 @@ export function cn(...inputs: ClassValue[]) {
  return twMerge(clsx(inputs));
 }
 
-function idToEmployee(employees, id) {
+function idToEmployee(employees: Employee[], id: string) {
  return employees.find((employee) => employee.id === id);
 }
 
-export function createNestedHierarchy(employees, parent) {
+type HierarchyNode = {
+ name: string
+ children?: HierarchyNode[]
+}
+
+export function createNestedHierarchy(employees: Employee[], parent: Employee): HierarchyNode {
  if (!parent) {
   return null;
  }
 
- const result = { name: parent.name };
+ const result: HierarchyNode = {
+  name: parent.name
+ };
 
  if (parent.subordinates && parent.subordinates.length > 0) {
-  result.children = parent.subordinates.map((subordinateId) => {
+  result.children = parent.subordinates.map((subordinateId: string) => {
    return createNestedHierarchy(employees, idToEmployee(employees, subordinateId));
   });
  }
@@ -25,10 +32,10 @@ export function createNestedHierarchy(employees, parent) {
  return result;
 }
 
-export function getSubordinates(employees, employee) {
+export function getSubordinates(employees: Employee[], employee: Employee) {
  const subordinates = [];
- employee.subordinates.map(subordinateId => {
+ employee.subordinates.map((subordinateId) => {
   subordinates.push(idToEmployee(employees, subordinateId));
- })
- return subordinates
+ });
+ return subordinates;
 }

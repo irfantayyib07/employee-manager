@@ -1,13 +1,13 @@
 import SectionHeading from "./ui/section-heading";
 import Tree from "react-d3-tree";
 import { createNestedHierarchy } from "@/lib/utils";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/app/store";
 import { selectAllEmployees, useGetEmployeesQuery } from "@/app/employeeApiSlice";
 import Loader from "./ui/loader";
 
 function OrgChartTree() {
  const { isLoading } = useGetEmployeesQuery();
- const employees = useSelector(selectAllEmployees);
+ const employees = useAppSelector(selectAllEmployees);
 
  const orgChart = createNestedHierarchy(
   employees,
@@ -16,20 +16,23 @@ function OrgChartTree() {
 
  return (
   <>
-   {isLoading &&
-    <Loader />
-   }
+   {isLoading && <Loader />}
    {!isLoading && !orgChart && <p>Add employees in the Manage section to see the hierarchy here</p>}
-   {orgChart &&
+   {orgChart && (
     <div id="treeWrapper" className="h-full border border-slate-300 rounded-md overflow-hidden">
-     <Tree data={orgChart} orientation="vertical" depthFactor={200} separation={{ nonSiblings: 2, siblings: 2 }} />
+     <Tree
+      data={orgChart}
+      orientation="vertical"
+      depthFactor={200}
+      separation={{ nonSiblings: 2, siblings: 2 }}
+     />
     </div>
-   }
+   )}
   </>
  );
 }
 
-function Hierarchy({ }) {
+function Hierarchy({}) {
  return (
   <>
    <main className="bg-slate-100 p-4 basis-2/3 grow flex flex-col">
@@ -38,7 +41,6 @@ function Hierarchy({ }) {
      <OrgChartTree />
     </div>
    </main>
-
   </>
  );
 }

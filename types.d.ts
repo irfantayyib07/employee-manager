@@ -1,6 +1,6 @@
 type Employee = {
  name: string;
- id: number;
- supervisorId: number;
- subordinates: number[];
+ id: string;
+ supervisorId: string;
+ subordinates: string[];
 };

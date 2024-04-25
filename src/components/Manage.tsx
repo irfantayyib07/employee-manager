@@ -11,21 +11,24 @@ import {
 } from "@/components/ui/table";
 import EditEmployee from "./EditEmployee";
 import DeleteEmployee from "./DeleteEmployee";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/app/store";
 import Loader from "./ui/loader";
 import { useState } from "react";
 
-function ManageEmployees({ }) {
+function ManageEmployees({}) {
  const { isLoading } = useGetEmployeesQuery();
 
- const employees = useSelector(selectEmployeeIds);
+ const employees = useAppSelector(selectEmployeeIds);
+ // const employeess = useAppSelector(state => console.log(state));
 
  return (
   <>
    <main className="relative bg-slate-100 p-4 basis-2/3 grow flex flex-col md:overflow-auto">
     <SectionHeading>Manage your employees</SectionHeading>
     <div className="relative flex-stretch">
-     {isLoading ? <Loader />:
+     {isLoading ? (
+      <Loader />
+     ) : (
       <Table>
        <TableCaption>You're all done!</TableCaption>
        <TableHeader>
@@ -40,18 +43,19 @@ function ManageEmployees({ }) {
          return <EmployeesRow employeeId={id} key={id} />;
         })}
        </TableBody>
-      </Table>}
+      </Table>
+     )}
     </div>
    </main>
   </>
  );
 }
 
-const EmployeesRow = ({ employeeId }) => {
- const loadingState = useState(false);
- 
- const employee = useSelector((state) => selectEmployeeById(state, employeeId));
- const supervisor = useSelector((state) => selectEmployeeById(state, employee.supervisorId));
+const EmployeesRow = ({ employeeId }: { employeeId: string }) => {
+ const loadingState = useState<boolean>(false);
+
+ const employee = useAppSelector((state) => selectEmployeeById(state, employeeId));
+ const supervisor = useAppSelector((state) => selectEmployeeById(state, employee.supervisorId));
 
  return (
   <TableRow>

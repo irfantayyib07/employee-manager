@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import "./output.css";
 import { extendedApiSlice } from "./app/employeeApiSlice.ts";
 
-store.dispatch(extendedApiSlice.endpoints.getEmployees.initiate()); // initiate thunk
+store.dispatch(extendedApiSlice.endpoints.getEmployees.initiate(null)); // initiate thunk
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
  // <React.StrictMode>

@@ -1,6 +1,6 @@
 import { Oval } from "react-loader-spinner";
 
-function Loader({ }) {
+function Loader({}) {
  return (
   <>
    <Oval
