@@ -2,14 +2,10 @@ import { createSelector, createEntityAdapter, EntityState, EntityId } from "@red
 import { apiSlice } from "@/app/api/apiSlice";
 import { RootState } from "./store";
 
-const employeesAdapter = createEntityAdapter();
-
-const initialState = employeesAdapter.getInitialState();
-
 type ExtendedEmployee = Employee & { _id: string, __v: number; };
 
 type ExpandedType = ExpandRecursively<
- EntityState<{ id: EntityId; } & Employee, EntityId>
+ EntityState<Employee, EntityId>
 >;
 
 // { ids: EntityId[], entities: Record<EntityId, Employee>}
@@ -17,13 +13,21 @@ type ExpandedType = ExpandRecursively<
 // no errors / no intellisense
 // EntityState<{ id: EntityId; }, EntityId>
 
+// typeof "employeesAdapter.setAll(initialState, responseData)" = EntityState<{
+//  id: EntityId;
+// }, EntityId>
+
+const employeesAdapter = createEntityAdapter();
+
+const initialState = employeesAdapter.getInitialState();
+
 // SLICE
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
  endpoints: (builder) => ({
-  getEmployees: builder.query<EntityState<{ id: EntityId; }, EntityId>, void>({
+  getEmployees: builder.query<EntityState<Employee, EntityId>, void>({
    query: () => "/employees",
-   transformResponse: (responseData: ExtendedEmployee[]) => {
+   transformResponse: (responseData: ExtendedEmployee[]): EntityState<Employee, EntityId> => {
     if (!responseData) return;
 
     responseData.map(employee => {
@@ -34,7 +38,6 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
     return employeesAdapter.setAll(initialState, responseData);
    },
    providesTags: () => {
-    // result is the state (with ids array and entities object)
     return [{ type: "Employee", id: "LIST" }];
    },
   }),
