@@ -2,12 +2,20 @@ import { createSelector, createEntityAdapter, EntityState, EntityId } from "@red
 import { apiSlice } from "@/app/api/apiSlice";
 import { RootState } from "./store";
 
-const employeesAdapter = createEntityAdapter({});
+const employeesAdapter = createEntityAdapter();
 
 const initialState = employeesAdapter.getInitialState();
 
 type ExtendedEmployee = Employee & { _id: string, __v: number; };
-type TypedEmployee = Employee & EntityId
+
+type ExpandedType = ExpandRecursively<
+ EntityState<{ id: EntityId; } & Employee, EntityId>
+>;
+
+// { ids: EntityId[], entities: Record<EntityId, Employee>}
+
+// no errors / no intellisense
+// EntityState<{ id: EntityId; }, EntityId>
 
 // SLICE
 
@@ -78,7 +86,7 @@ export const {
 // SELECTORS (for convenience)
 
 // returns the query result object (from cache)
-export const selectEmployeesResult = extendedApiSlice.endpoints.getEmployees.select();
+export const selectEmployeesResult = extendedApiSlice.endpoints.getEmployees.select(null);
 
 // Creates memoized selector
 const selectEmployeesData = createSelector(

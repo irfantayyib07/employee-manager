@@ -14,6 +14,7 @@ import DeleteEmployee from "./DeleteEmployee";
 import { useAppSelector } from "@/app/store";
 import Loader from "./ui/loader";
 import { useState } from "react";
+import { Employee } from "types";
 
 function ManageEmployees({}) {
  const { isLoading } = useGetEmployeesQuery();
@@ -54,7 +55,7 @@ function ManageEmployees({}) {
 const EmployeesRow = ({ employeeId }: { employeeId: string }) => {
  const loadingState = useState<boolean>(false);
 
- const employee = useAppSelector((state) => selectEmployeeById(state, employeeId));
+ const employee: Employee = useAppSelector((state) => selectEmployeeById(state, employeeId));
  const supervisor = useAppSelector((state) => selectEmployeeById(state, employee.supervisorId));
 
  return (
