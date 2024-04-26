@@ -67,7 +67,7 @@ export function AddEmployee() {
     jobs.push(
      updateEmployee({
       id: selectedSupervisorId,
-      subordinates: [...supervisorToBe?.subordinates, id],
+      subordinateId: { id, operation: "add" },
      }).unwrap(),
     );
 
