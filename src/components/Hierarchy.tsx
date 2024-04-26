@@ -6,7 +6,7 @@ import { selectAllEmployees, useGetEmployeesQuery } from "@/app/employeeApiSlice
 import Loader from "./ui/loader";
 
 function OrgChartTree() {
- const { isLoading } = useGetEmployeesQuery();
+ const { isLoading, isSuccess } = useGetEmployeesQuery();
  const employees = useAppSelector(selectAllEmployees);
 
  const orgChart = createNestedHierarchy(
@@ -18,7 +18,7 @@ function OrgChartTree() {
   <>
    {isLoading && <Loader />}
    {!isLoading && !orgChart && <p>Add employees in the Manage section or have some employee with no supervisor to see the hierarchy here</p>}
-   {orgChart && (
+   {isSuccess && orgChart && (
     <div id="treeWrapper" className="h-full border border-slate-300 rounded-md overflow-hidden">
      <Tree
       data={orgChart}
