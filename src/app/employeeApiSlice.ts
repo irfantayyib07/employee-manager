@@ -2,7 +2,7 @@ import { createSelector, createEntityAdapter, EntityState, EntityId } from "@red
 import { apiSlice } from "@/app/api/apiSlice";
 import { RootState } from "./store";
 
-type ExtendedEmployee = Employee & { _id: string, __v: number; };
+type ExtendedEmployee = Employee & { _id: string, __v: number };
 
 type ExpandedType = ExpandRecursively<
  EntityState<Employee, EntityId>
@@ -25,9 +25,9 @@ const initialState = employeesAdapter.getInitialState();
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
  endpoints: (builder) => ({
-  getEmployees: builder.query<EntityState<Employee, EntityId>, void>({
+  getEmployees: builder.query<EntityState<{ id: EntityId }, EntityId>, void>({
    query: () => "/employees",
-   transformResponse: (responseData: ExtendedEmployee[]): EntityState<Employee, EntityId> => {
+   transformResponse: (responseData: ExtendedEmployee[]): EntityState<{ id: EntityId }, EntityId> => {
     if (!responseData) return;
 
     responseData.map(employee => {

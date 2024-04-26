@@ -1,8 +1,8 @@
 type Employee = {
- name?: string;
+ name: string;
  id: string;
- supervisorId?: string;
- subordinates?: string[];
+ supervisorId: string;
+ subordinates: string[];
 };
 
 // expands object types one level deep
