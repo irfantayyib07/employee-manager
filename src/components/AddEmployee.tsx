@@ -54,7 +54,7 @@ export function AddEmployee() {
      variant: "destructive",
      title: "Failure!",
      description:
-      "Name must be at least 3 characters and supervisor must be assigned (No two employees can be CEO).",
+      "Name must be at least 3 characters and a supervisor must be assigned (No two employees can be CEO).",
     });
     return;
    }

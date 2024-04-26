@@ -43,7 +43,7 @@ function DeleteEmployee({
     toast({
      variant: "destructive",
      title: "Failure!",
-     description: "Cannot delete an employee who is a supervisor.",
+     description: "Cannot delete an employee who also has subordinates.",
     });
 
     return;
