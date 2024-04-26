@@ -48,13 +48,14 @@ function EditEmployee({
     return;
    }
 
-   const jobs = [updateEmployee({ id: employee.id, name, supervisorId: { id: selectedSupervisorId, operation: "add" } }).unwrap()];
+   const jobs = [updateEmployee({ id: employee.id, name, supervisorId: selectedSupervisorId, operation: "add" }).unwrap()];
 
    if (supervisorToBe) {
     jobs.push(
      updateEmployee({
       id: selectedSupervisorId,
-      subordinates: { id: employee.id, operation: "add" },
+      subordinates: employee.id,
+      operation: "add"
      }).unwrap(),
     );
    }
@@ -63,7 +64,8 @@ function EditEmployee({
     jobs.push(
      updateEmployee({
       id: formerSupervisor.id,
-      subordinateId: { id: employee.id, operation: "remove" },
+      subordinateId: employee.id,
+      operation: "remove"
      }).unwrap(),
     );
    }

@@ -55,7 +55,8 @@ function DeleteEmployee({
     jobs.push(
      updateEmployee({
       id: supervisor.id,
-      subordinateId: { id: employee.id, operation: "remove" },
+      subordinateId: employee.id,
+      operation: "remove"
      }).unwrap(),
     );
 
