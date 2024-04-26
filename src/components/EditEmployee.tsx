@@ -59,7 +59,7 @@ function EditEmployee({
     );
    }
 
-   if (formerSupervisor && formerSupervisor.id !== "-" && selectedSupervisorId !== formerSupervisor.id) {
+   if (formerSupervisor && selectedSupervisorId !== formerSupervisor.id) {
     jobs.push(
      updateEmployee({
       id: formerSupervisor.id,
