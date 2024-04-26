@@ -27,7 +27,7 @@ export function AddEmployee() {
  const [loading, setLoading] = useState(false);
  const [name, setName] = useState("");
 
- const [selectedSupervisorId, setSelectedSupervisorId] = useState("—");
+ const [selectedSupervisorId, setSelectedSupervisorId] = useState<string>("—");
  const supervisorToBe = useAppSelector((state) => selectEmployeeById(state, selectedSupervisorId));
 
  const [addNewEmployee] = useAddNewEmployeeMutation();
