@@ -48,13 +48,13 @@ function EditEmployee({
     return;
    }
 
-   const jobs = [updateEmployee({ id: employee.id, name, supervisorId: selectedSupervisorId, operation: "add" }).unwrap()];
+   const jobs = [updateEmployee({ id: employee.id, name, supervisorId: selectedSupervisorId }).unwrap()];
 
    if (supervisorToBe) {
     jobs.push(
      updateEmployee({
       id: selectedSupervisorId,
-      subordinates: employee.id,
+      subordinateId: employee.id,
       operation: "add"
      }).unwrap(),
     );
