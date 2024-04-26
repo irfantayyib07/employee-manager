@@ -4,9 +4,9 @@ import { RootState } from "./store";
 
 type ExtendedEmployee = Employee & { _id: string, __v: number };
 
-type ExpandedType = ExpandRecursively<
- EntityState<Employee, EntityId>
->;
+// type ExpandedType = ExpandRecursively<
+//  EntityState<Employee, EntityId>
+// >;
 
 // { ids: EntityId[], entities: Record<EntityId, Employee>}
 
@@ -17,7 +17,7 @@ type ExpandedType = ExpandRecursively<
 //  id: EntityId;
 // }, EntityId>
 
-const employeesAdapter = createEntityAdapter();
+const employeesAdapter = createEntityAdapter<Employee>();
 
 const initialState = employeesAdapter.getInitialState();
 
@@ -25,9 +25,9 @@ const initialState = employeesAdapter.getInitialState();
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
  endpoints: (builder) => ({
-  getEmployees: builder.query<EntityState<{ id: EntityId }, EntityId>, void>({
+  getEmployees: builder.query<EntityState<Employee, string>, void>({
    query: () => "/employees",
-   transformResponse: (responseData: ExtendedEmployee[]): EntityState<{ id: EntityId }, EntityId> => {
+   transformResponse: (responseData: ExtendedEmployee[]): EntityState<Employee, string> => {
     if (!responseData) return;
 
     responseData.map(employee => {
