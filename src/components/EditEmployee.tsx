@@ -63,7 +63,7 @@ function EditEmployee({
     jobs.push(
      updateEmployee({
       id: formerSupervisor.id,
-      subordinates: formerSupervisor.subordinates.filter((id) => id !== employee.id),
+      subordinateId: employee.id,
      }).unwrap(),
     );
    }
@@ -104,7 +104,7 @@ function EditEmployee({
       <Label htmlFor="name" className="text-right">
        Name
       </Label>
-      <Input id="name" value={name} onChange={(e) => setName(e.target.value)} className="col-span-3" />
+      <Input id="name" value={name} onChange={(e) => setName(e.target.value)} className="col-span-3" autoComplete="off" />
      </div>
      <div className="grid grid-cols-4 items-center gap-4">
       <Label htmlFor="username" className="text-right">

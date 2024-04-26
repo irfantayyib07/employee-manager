@@ -115,6 +115,7 @@ export function AddEmployee() {
        onChange={(e) => setName(e.target.value)}
        className="col-span-3"
        required={true}
+       autoComplete="off"
       />
      </div>
      <div className="grid grid-cols-4 items-center gap-4">

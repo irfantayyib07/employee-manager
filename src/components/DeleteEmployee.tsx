@@ -35,6 +35,8 @@ function DeleteEmployee({
  // const employees = useAppSelector(selectAllEmployees);
  const supervisor = useAppSelector((state) => selectEmployeeById(state, employee.supervisorId));
 
+ console.log(employee, supervisor);
+
  const { toast } = useToast();
 
  const onDeleteEmployeeClicked = async () => {
@@ -55,7 +57,7 @@ function DeleteEmployee({
     jobs.push(
      updateEmployee({
       id: supervisor.id,
-      subordinates: supervisor.subordinates.filter((id) => id !== employee.id),
+      subordinateId: employee.id,
      }).unwrap(),
     );
 
