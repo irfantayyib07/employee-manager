@@ -35,8 +35,6 @@ function DeleteEmployee({
  // const employees = useAppSelector(selectAllEmployees);
  const supervisor = useAppSelector((state) => selectEmployeeById(state, employee.supervisorId));
 
- console.log(employee, supervisor);
-
  const { toast } = useToast();
 
  const onDeleteEmployeeClicked = async () => {
