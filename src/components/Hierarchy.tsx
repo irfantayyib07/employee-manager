@@ -11,13 +11,13 @@ function OrgChartTree() {
 
  const orgChart = createNestedHierarchy(
   employees,
-  employees.find((item) => item.supervisorId === "—"),
+  employees.find((item) => item.supervisorId === "-"),
  );
 
  return (
   <>
    {isLoading && <Loader />}
-   {!isLoading && !orgChart && <p>Add employees in the Manage section to see the hierarchy here</p>}
+   {!isLoading && !orgChart && <p>Add employees in the Manage section or have some employee with no supervisor to see the hierarchy here</p>}
    {orgChart && (
     <div id="treeWrapper" className="h-full border border-slate-300 rounded-md overflow-hidden">
      <Tree

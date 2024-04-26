@@ -19,7 +19,6 @@ function ManageEmployees({}) {
  const { isLoading } = useGetEmployeesQuery();
 
  const employees = useAppSelector(selectEmployeeIds);
- // const employeess = useAppSelector(state => console.log(state));
 
  return (
   <>
@@ -60,7 +59,7 @@ const EmployeesRow = ({ employeeId }: { employeeId: string }) => {
  return (
   <TableRow>
    <TableCell className="font-medium">{employee?.name}</TableCell>
-   <TableCell>{supervisor?.name || "—"}</TableCell>
+   <TableCell>{supervisor?.name || "-"}</TableCell>
    <TableCell className="flex gap-1 flex-wrap">
     <EditEmployee employee={employee} loadingState={loadingState} />
     <DeleteEmployee employee={employee} loadingState={loadingState} />

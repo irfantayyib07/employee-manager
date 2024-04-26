@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import {
+ selectAllEmployees,
  selectEmployeeById,
  useAddNewEmployeeMutation,
  useUpdateEmployeeMutation,
@@ -27,7 +28,13 @@ export function AddEmployee() {
  const [loading, setLoading] = useState(false);
  const [name, setName] = useState("");
 
- const [selectedSupervisorId, setSelectedSupervisorId] = useState<string>("—");
+ const employees = useAppSelector(selectAllEmployees);
+
+ const ceoExists = employees.map(employee => {
+  return employee.supervisorId;
+ }).includes("-");
+
+ const [selectedSupervisorId, setSelectedSupervisorId] = useState<string>("");
  const supervisorToBe = useAppSelector((state) => selectEmployeeById(state, selectedSupervisorId));
 
  const [addNewEmployee] = useAddNewEmployeeMutation();
@@ -37,9 +44,15 @@ export function AddEmployee() {
 
  const onAddEmployeeClicked = async () => {
   try {
-   if (name.length < 3) {
+   if (name.length < 3 || (ceoExists && !selectedSupervisorId)) {
     setName("");
-    setSelectedSupervisorId("—");
+    setSelectedSupervisorId("");
+
+    toast({
+     variant: "destructive",
+     title: "Failure!",
+     description: "Name must be at least 3 characters and supervisor must be assigned (No two employees can be CEO).",
+    });
     return;
    }
 
@@ -59,7 +72,7 @@ export function AddEmployee() {
    await Promise.all(jobs);
 
    setName("");
-   setSelectedSupervisorId("—");
+   setSelectedSupervisorId("");
    toast({
     title: "Done!",
     description: "Employee added successfully!",

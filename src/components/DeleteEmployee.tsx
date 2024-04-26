@@ -33,13 +33,23 @@ function DeleteEmployee(
  const [updateEmployee] = useUpdateEmployeeMutation();
  const [deleteEmployee] = useDeleteEmployeeMutation();
 
- const employees = useAppSelector(selectAllEmployees);
+ // const employees = useAppSelector(selectAllEmployees);
  const supervisor = useAppSelector((state) => selectEmployeeById(state, employee.supervisorId));
 
  const { toast } = useToast();
 
  const onDeleteEmployeeClicked = async () => {
   try {
+   if (employee.subordinates.length > 0) {
+    toast({
+     variant: "destructive",
+     title: "Failure!",
+     description: "Cannot delete an employee who is a supervisor.",
+    });
+
+    return;
+   }
+
    const jobs = [deleteEmployee({ id: employee.id }).unwrap()];
 
    if (supervisor)
@@ -50,11 +60,11 @@ function DeleteEmployee(
      }).unwrap(),
     );
 
-   const subordinates = getSubordinates(employees, employee);
+   // const subordinates = getSubordinates(employees, employee);
 
-   subordinates?.map((subordinate) => {
-    jobs.push(updateEmployee({ id: subordinate.id, supervisorId: "—" }).unwrap());
-   });
+   // subordinates?.map((subordinate) => {
+   //  jobs.push(updateEmployee({ id: subordinate.id, supervisorId: "-" }).unwrap());
+   // });
 
    setLoading(true);
    await Promise.all(jobs);

@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Pencil } from "lucide-react";
 import { useAppSelector } from "@/app/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { selectEmployeeById, useUpdateEmployeeMutation } from "@/app/employeeApiSlice";
 import { useToast } from "./ui/use-toast";
 import SupervisorSelector from "./ui/supervisor-selector";
@@ -29,6 +29,10 @@ function EditEmployee({
  const [name, setName] = useState(employee.name);
 
  const formerSupervisor = useAppSelector((state) => selectEmployeeById(state, employee.supervisorId));
+
+ useEffect(() => {
+  if (!formerSupervisor) setSelectedSupervisorId("-");
+ }, [formerSupervisor])
 
  const [selectedSupervisorId, setSelectedSupervisorId] = useState(formerSupervisor?.id);
  const supervisorToBe = useAppSelector((state) => selectEmployeeById(state, selectedSupervisorId));
@@ -55,7 +59,7 @@ function EditEmployee({
     );
    }
 
-   if (formerSupervisor && formerSupervisor.id !== "—" && selectedSupervisorId !== formerSupervisor.id) {
+   if (formerSupervisor && formerSupervisor.id !== "-" && selectedSupervisorId !== formerSupervisor.id) {
     jobs.push(
      updateEmployee({
       id: formerSupervisor.id,

@@ -9,17 +9,25 @@ import {
 } from "@/components/ui/select";
 import { selectAllEmployees } from "@/app/employeeApiSlice";
 import { useAppSelector } from "@/app/store";
-import React from "react";
+import React, { useEffect } from "react";
 
 type SupervisorSelectorProps = {
- employee?: Employee
- defaultValue?: Employee
- supervisorId: string
- setSupervisorId: React.Dispatch<React.SetStateAction<string>>
-}
+ employee?: Employee;
+ defaultValue?: Employee;
+ supervisorId: string;
+ setSupervisorId: React.Dispatch<React.SetStateAction<string>>;
+};
 
 function SupervisorSelector({ employee, defaultValue, supervisorId, setSupervisorId }: SupervisorSelectorProps) {
  const supervisors = useAppSelector(selectAllEmployees);
+
+ const ceo = supervisors.find(supervisor => {
+  return supervisor.supervisorId === "-";
+ });
+ 
+ useEffect(() => {
+  if (!ceo && !defaultValue) setSupervisorId("-");
+ }, [])
 
  return (
   <Select value={supervisorId} onValueChange={value => setSupervisorId(value)}>
@@ -29,7 +37,7 @@ function SupervisorSelector({ employee, defaultValue, supervisorId, setSuperviso
    <SelectContent>
     <SelectGroup>
      <SelectLabel>Supervisors</SelectLabel>
-     <SelectItem value={"—"}>No Supervisor</SelectItem>
+     {(ceo?.id === employee?.id || !ceo) && <SelectItem value="-">No Supervisor</SelectItem>}
      {supervisors?.map((supervisor) => {
       if (supervisor.id !== employee?.id) {
        if (!employee?.subordinates.includes(supervisor.id))
