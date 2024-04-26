@@ -12,17 +12,17 @@ import { useAppSelector } from "@/app/store";
 import React from "react";
 
 type SupervisorSelectorProps = {
- employee: Employee
- defaultValue: Employee
+ employee?: Employee
+ defaultValue?: Employee
  supervisorId: string
- setSupervisorId: React.SetStateAction<string>
+ setSupervisorId: React.Dispatch<React.SetStateAction<string>>
 }
 
 function SupervisorSelector({ employee, defaultValue, supervisorId, setSupervisorId }: SupervisorSelectorProps) {
  const supervisors = useAppSelector(selectAllEmployees);
 
  return (
-  <Select value={supervisorId} onValueChange={setSupervisorId}>
+  <Select value={supervisorId} onValueChange={value => setSupervisorId(value)}>
    <SelectTrigger className="w-[180px]">
     <SelectValue placeholder={defaultValue?.name || "Select a supervisor"} />
    </SelectTrigger>
