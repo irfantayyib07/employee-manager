@@ -18,19 +18,24 @@ type SupervisorSelectorProps = {
  setSupervisorId: React.Dispatch<React.SetStateAction<string>>;
 };
 
-function SupervisorSelector({ employee, defaultValue, supervisorId, setSupervisorId }: SupervisorSelectorProps) {
+function SupervisorSelector({
+ employee,
+ defaultValue,
+ supervisorId,
+ setSupervisorId,
+}: SupervisorSelectorProps) {
  const supervisors = useAppSelector(selectAllEmployees);
 
- const ceo = supervisors.find(supervisor => {
+ const ceo = supervisors.find((supervisor) => {
   return supervisor.supervisorId === "-";
  });
- 
+
  useEffect(() => {
   if (!ceo && !defaultValue) setSupervisorId("-");
- }, [])
+ }, []);
 
  return (
-  <Select value={supervisorId} onValueChange={value => setSupervisorId(value)}>
+  <Select value={supervisorId} onValueChange={(value) => setSupervisorId(value)}>
    <SelectTrigger className="w-[180px]">
     <SelectValue placeholder={defaultValue?.name || "Select a supervisor"} />
    </SelectTrigger>

@@ -16,7 +16,7 @@ import Loader from "./ui/loader";
 import { useState } from "react";
 
 function ManageEmployees({}) {
- const { isLoading } = useGetEmployeesQuery();
+ const { isLoading, isSuccess } = useGetEmployeesQuery();
 
  const employees = useAppSelector(selectEmployeeIds);
 
@@ -25,9 +25,8 @@ function ManageEmployees({}) {
    <main className="relative bg-slate-100 p-4 basis-2/3 grow flex flex-col md:overflow-auto">
     <SectionHeading>Manage your employees</SectionHeading>
     <div className="relative flex-stretch">
-     {isLoading ? (
-      <Loader />
-     ) : (
+     {isLoading && <Loader />}
+     {isSuccess && (
       <Table>
        <TableCaption>You're all done!</TableCaption>
        <TableHeader>

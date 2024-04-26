@@ -20,14 +20,13 @@ import { useToast } from "./ui/use-toast";
 import { useAppSelector } from "@/app/store";
 import { getSubordinates } from "@/lib/utils";
 
-function DeleteEmployee(
- {
-  employee,
-  loadingState
- }: {
-  employee: Employee;
-  loadingState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
- }) {
+function DeleteEmployee({
+ employee,
+ loadingState,
+}: {
+ employee: Employee;
+ loadingState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+}) {
  const [loading, setLoading] = loadingState;
 
  const [updateEmployee] = useUpdateEmployeeMutation();

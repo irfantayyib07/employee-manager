@@ -30,9 +30,11 @@ export function AddEmployee() {
 
  const employees = useAppSelector(selectAllEmployees);
 
- const ceoExists = employees.map(employee => {
-  return employee.supervisorId;
- }).includes("-");
+ const ceoExists = employees
+  .map((employee) => {
+   return employee.supervisorId;
+  })
+  .includes("-");
 
  const [selectedSupervisorId, setSelectedSupervisorId] = useState<string>("");
  const supervisorToBe = useAppSelector((state) => selectEmployeeById(state, selectedSupervisorId));
@@ -51,7 +53,8 @@ export function AddEmployee() {
     toast({
      variant: "destructive",
      title: "Failure!",
-     description: "Name must be at least 3 characters and supervisor must be assigned (No two employees can be CEO).",
+     description:
+      "Name must be at least 3 characters and supervisor must be assigned (No two employees can be CEO).",
     });
     return;
    }

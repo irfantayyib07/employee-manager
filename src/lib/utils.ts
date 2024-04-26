@@ -10,9 +10,9 @@ function idToEmployee(employees: Employee[], id: string) {
 }
 
 type HierarchyNode = {
- name: string
- children?: HierarchyNode[]
-}
+ name: string;
+ children?: HierarchyNode[];
+};
 
 export function createNestedHierarchy(employees: Employee[], parent: Employee): HierarchyNode {
  if (!parent) {
@@ -20,7 +20,7 @@ export function createNestedHierarchy(employees: Employee[], parent: Employee): 
  }
 
  const result: HierarchyNode = {
-  name: parent.name
+  name: parent.name,
  };
 
  if (parent.subordinates && parent.subordinates.length > 0) {

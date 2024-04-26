@@ -32,7 +32,7 @@ function EditEmployee({
 
  useEffect(() => {
   if (!formerSupervisor) setSelectedSupervisorId("-");
- }, [formerSupervisor])
+ }, [formerSupervisor]);
 
  const [selectedSupervisorId, setSelectedSupervisorId] = useState(formerSupervisor?.id);
  const supervisorToBe = useAppSelector((state) => selectEmployeeById(state, selectedSupervisorId));

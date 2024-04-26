@@ -7,7 +7,7 @@ function Sidebar({}) {
 
  useEffect(() => {
   const links = document.querySelectorAll("aside a") as NodeListOf<HTMLAnchorElement>;
-  for (let i = 0; i < links.length; i++ ) {
+  for (let i = 0; i < links.length; i++) {
    if (links[i].pathname === "/") links[i].focus();
    if (links[i].pathname === pathname) links[i].focus();
   }
