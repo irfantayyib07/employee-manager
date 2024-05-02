@@ -1,18 +1,7 @@
-import { Link, useLocation, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { SIDEBAR_NAV_LINKS } from "../constants/sidebarNavLinks";
-import { useEffect } from "react";
 
 function Sidebar({}) {
- const { pathname } = useLocation();
-
- useEffect(() => {
-  const links = document.querySelectorAll("aside a") as NodeListOf<HTMLAnchorElement>;
-  for (let i = 0; i < links.length; i++) {
-   if (links[i].pathname === "/") links[i].focus();
-   if (links[i].pathname === pathname) links[i].focus();
-  }
- }, [pathname]);
-
  return (
   <>
    <aside className="bg-slate-200 md:h-screen p-4 md:basis-1/3 md:max-w-80">
@@ -22,12 +11,17 @@ function Sidebar({}) {
     <ul className="space-y-2">
      {SIDEBAR_NAV_LINKS.map((link) => (
       <li key={link.path}>
-       <Link
+       <NavLink
         to={link.path}
-        className="inline-block w-full hover:bg-slate-300 p-2 transition rounded-md focus:bg-slate-300 focus:outline-none"
+        className={({ isActive }) =>
+         [
+          "inline-block w-full hover:bg-slate-300 p-2 transition rounded-md focus:bg-slate-300 focus:outline-none",
+           isActive ? "bg-slate-300 outline-none" : "",
+         ].join(" ")
+       }
        >
         {link.name}
-       </Link>
+       </NavLink>
       </li>
      ))}
     </ul>
