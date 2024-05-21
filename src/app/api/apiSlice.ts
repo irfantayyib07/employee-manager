@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery, BaseQueryFn } from "@reduxjs/toolkit/query/r
 
 export const apiSlice = createApi({
  reducerPath: "api", // optional
- baseQuery: fetchBaseQuery({ baseUrl: "https://mavenup-backend.vercel.app/" }),
+ baseQuery: fetchBaseQuery({ baseUrl: "https://employee-manager-it-backend.vercel.app/" }),
  tagTypes: ["Employee"],
  endpoints: (builder) => ({}),
 });
